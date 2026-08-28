@@ -120,20 +120,20 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       <h2 class="font-serif-display text-3xl md:text-4xl text-klein">Ime i podrijetlo</h2>
       <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
 
-      <p class="pocetno-slovo mt-8 text-lg leading-relaxed text-foreground">
+      <p class="pocetno-slovo mt-8 text-lg leading-relaxed text-klein">
         Pejdo je obiteljsko ime koje nose Hrvati iz Blizanaca, sela u općini Čitluk na Brotnju —
         kamenoj visoravni između Neretve i Mostarskog blata. Kao i mnoga hercegovačka obiteljska
         imena, prenosilo se usmeno kroz naraštaje prije nego što je zapisano u matične knjige koje
         su vodile župe.
       </p>
 
-      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+      <p class="mt-6 text-lg leading-relaxed text-klein">
         Povijest jedne obitelji ne stoji u knjigama nego u ljudima — u tome gdje je čija kuća, koja
         je loza čija, kome se ide na slavu i koga se spominje na Svi svete. Dio toga zapisan je u
         župnim knjigama, dio postoji samo dok ga se prenosi dalje.
       </p>
 
-      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+      <p class="mt-6 text-lg leading-relaxed text-klein">
         Ova stranica postoji da se taj drugi dio ne izgubi. Ako imate podatke, fotografije ili priče
         iz obitelji, dobro su došli — svaki zapis nadopunjuje sliku.
       </p>
@@ -176,8 +176,8 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
           <dl class="mt-8 space-y-6">
             {obiteljskiZapisi.map((zapis) => (
               <div class="border-l-2 border-klein pl-6">
-                <dt class="font-serif-display text-xl">{zapis.naslov}</dt>
-                <dd class="mt-2 leading-relaxed text-muted-foreground">{zapis.tekst}</dd>
+                <dt class="font-serif-display text-xl text-klein">{zapis.naslov}</dt>
+                <dd class="mt-2 leading-relaxed text-klein">{zapis.tekst}</dd>
               </div>
             ))}
           </dl>
@@ -185,15 +185,15 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       }
 
       <div class="mt-8 rounded-lg border border-dashed bg-muted/40 p-6 md:p-8">
-        <p class="leading-relaxed text-muted-foreground">
+        <p class="leading-relaxed text-klein">
           Zapisi o najstarijim poznatim precima i granama obitelji upisuju se kako se prikupe iz
           župnih knjiga i obiteljskog pamćenja.
         </p>
-        <p class="mt-4 leading-relaxed text-muted-foreground">
+        <p class="mt-4 leading-relaxed text-klein">
           Imate podatak, fotografiju ili priču?{' '}
           <a
             href="/contact"
-            class="font-medium text-foreground underline decoration-klein decoration-2 underline-offset-4 hover:text-klein transition-colors"
+            class="font-medium text-klein underline decoration-klein decoration-2 underline-offset-4 hover:text-klein/80 transition-colors"
           >
             Javite se
           </a>{' '}
