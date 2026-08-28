@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Contact from '@/components/sections/Contact.astro';
+
+// Delivery endpoint for the contact form. Messages arrive at the address
+// registered with the form provider (nikola@pejdo.com). Set
+// PUBLIC_CONTACT_FORM_ENDPOINT in .env - see .env.example for setup.
+// Until it is set, the form falls back to a mailto: submission so the page
+// never silently swallows a message.
+const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT;
+const contactEmail = 'nikola@pejdo.com';
+const siteUrl = Astro.site ?? new URL('http://localhost:4321');
+---
+
+<BaseLayout
+  title="Kontakt"
+  description="Javite se s pitanjem, upitom za projekt ili povratnom informacijom. Odgovaram u najkraćem roku."
+>
+  <Contact
+    title="Javite se"
+    subtitle="Pitanja, upiti za projekt ili povratne informacije — pošaljite poruku i javit ću se u najkraćem roku."
+    email={contactEmail}
+    formAction={formEndpoint ?? `mailto:${contactEmail}`}
+    formSubject="Nova poruka s web stranice"
+    successUrl={formEndpoint ? new URL('/contact', siteUrl).toString() : undefined}
+  />
+</BaseLayout>

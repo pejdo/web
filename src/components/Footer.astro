@@ -22,15 +22,16 @@ const { variant = 'boxed' } = Astro.props;
 
 const footerLinks = {
   astrodeck: [
-    { href: '/', label: 'Home' },
-    { href: '/docs', label: 'Docs' },
-    { href: '/sections', label: 'Sections' },
-    { href: '/changelog', label: 'Changelog' },
+    { href: '/', label: 'Početna' },
+    { href: '/pjesme', label: 'Pjesme' },
+    { href: '/latinski', label: 'Latinski' },
+    { href: '/fotos', label: 'Fotos' },
   ],
   pages: [
     { href: '/blog', label: 'Blog' },
-    { href: '/content', label: 'Content' },
-    { href: '/login', label: 'Login' },
+    { href: '/content', label: 'Sadržaj' },
+    { href: '/contact', label: 'Kontakt' },
+    { href: '/login', label: 'Prijava' },
   ],
 };
 
@@ -45,13 +46,13 @@ const containerClass =
       <div class="col-span-2 md:col-span-1">
         <Logo />
         <p class="mt-4 text-sm text-muted-foreground">
-          Open-source Astro.js starter kit with ready-to-use components. Start building faster.
+          Izrada brzih, pristupačnih i za pretraživače optimiziranih web stranica.
         </p>
       </div>
 
       <!-- AstroDeck -->
       <div>
-        <h3 class="font-semibold mb-4">AstroDeck</h3>
+        <h3 class="font-semibold mb-4">Stranice</h3>
         <ul class="space-y-0">
           {
             footerLinks.astrodeck.map((link) => (
@@ -70,7 +71,7 @@ const containerClass =
 
       <!-- Pages -->
       <div>
-        <h3 class="font-semibold mb-4">Pages</h3>
+        <h3 class="font-semibold mb-4">Sadržaj</h3>
         <ul class="space-y-0">
           {
             footerLinks.pages.map((link) => (
@@ -89,16 +90,16 @@ const containerClass =
 
       <!-- Creator -->
       <div>
-        <h3 class="font-semibold mb-4">Creator</h3>
-        <p class="text-sm text-muted-foreground">Created by Holger Könemann</p>
+        <h3 class="font-semibold mb-4">Autor</h3>
+        <p class="text-sm text-muted-foreground">Izradio Nikola Pejdo</p>
         <p class="text-sm text-muted-foreground mt-1">
-          for <a
-            href="https://templatedeck.com"
+          za <a
+            href="https://mirogoj.com"
             class="font-medium text-foreground hover:text-primary transition-colors inline-flex items-center gap-1 py-1"
             target="_blank"
             rel="noopener noreferrer"
           >
-            templatedeck.com
+            mirogoj.com
             <svg
               class="h-3 w-3"
               fill="none"
@@ -120,7 +121,7 @@ const containerClass =
 
     <!-- Copyright -->
     <div class="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-      <p>&copy; {new Date().getFullYear()} AstroDeck. MIT License. Open Source.</p>
+      <p>&copy; {new Date().getFullYear()} Nikola Pejdo. Sva prava pridržana.</p>
     </div>
   </div>
 </footer>

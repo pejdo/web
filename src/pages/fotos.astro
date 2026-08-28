@@ -1,0 +1,139 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Slideshow from '@/components/sections/Slideshow.astro';
+import type { SlideshowPhoto } from '@/components/sections/Slideshow.astro';
+import { fetchGooglePhotosAlbum, googlePhotoUrl } from '@/lib/googlePhotos';
+
+// Public Google Photos album, read at build time. Set
+// PUBLIC_GOOGLE_PHOTOS_ALBUM_URL in .env - see .env.example for setup.
+// Without it (or if the album cannot be read) the page falls back to the
+// locally defined photos below, so it is never empty.
+const albumUrl = import.meta.env.PUBLIC_GOOGLE_PHOTOS_ALBUM_URL;
+
+const googlePhotos = albumUrl ? await fetchGooglePhotosAlbum(albumUrl, { maxPhotos: 60 }) : [];
+
+/**
+ * Descriptions for the album, keyed by Google's stable per-photo id.
+ *
+ * Google Photos carries no alt text, so it is written here. Keying by id rather
+ * than by album position matters: adding or reordering a single photo would
+ * otherwise shift every description onto the wrong image.
+ *
+ * `skip: true` leaves a photo out of the gallery. The white PEJDO.COM variants
+ * are exported as JPEG, which has no transparency, so they are a white logo on a
+ * white background - visually blank. Re-export them as PNG (as in
+ * LOGO_White/PNG/) if you want them included.
+ *
+ * Photos not listed here still appear, with a generic description.
+ */
+const descriptions = new Map<string, { alt: string; caption?: string; skip?: boolean }>([
+  [
+    'AP1GczPs0cdRVEYo8VXHItlwqDqvJMJ2WrECgfnZ7WRFaOKQ9Uqz-WZK7rftEWNY1ivZitfsZ6O6H7RYwbJn90hsmg2EHi1RyFpMWQfTcSuzTQuqXCyxme0',
+    {
+      alt: 'Lege Cor logo — crveno srce s tehnickim linijama na tamnoj pozadini',
+      caption: 'Lege Cor',
+    },
+  ],
+  [
+    'AP1GczPhRAA6e2V1nD9EU-DXm8VGymn6OHphq3V7TcTBcfBTFbVKaLXD6Y2NSi7Vr2T1oMFIEtJIXqT-3rIFNO9-kbGWCZzwS3wbgx6YGREkg1KGj5J62Tk',
+    { alt: 'Vodoravni PEJDO.COM logo u crnoj boji', caption: 'Vodoravna verzija — crna' },
+  ],
+  [
+    'AP1GczNQcMoLavkVn6cJEJAiT-FB_f3uT1Y3YkCBjyB_bxgYEruSj75z-cxr1kG4Fyt0If2sIv5Ald76cfQWevkYP9qNfE1WIQOu5HOK8WcaC0s3gw0iHX0',
+    { alt: 'Okomiti PEJDO.COM logo u crnoj boji', caption: 'Okomita verzija — crna' },
+  ],
+  [
+    'AP1GczPMlQ9VFSNXZnrSKEQBfCxgaJ5uC4IgP6DsYubWaplnOoHD2zaHW46G1u5VtNAqbdi-MqWEFeXukKIl6-TtyC4DsSRGJhHBuO9qstvxc0dyF1jYJlo',
+    { alt: 'PEJDO.COM znak u crnoj boji', caption: 'Znak — crni' },
+  ],
+  // Blank white-on-white JPEG exports - left out of the gallery.
+  [
+    'AP1GczPo7FCFiIUDFKcOpiid4vN-0u_0_-vxLvsjL6W2X7b1QVqTzCCI_H_nK8Kgz1Wl0tspPA2tI_IY96yYVBYmR1slZ8eGX_bbBhmA4KcK9wjerWrx-80',
+    { alt: 'PEJDO.COM znak u bijeloj boji', skip: true },
+  ],
+  [
+    'AP1GczOTlUHPw2AXfDQeD6PRDjsNYebjo53YVFeIN2_fljk5FowoiXY_dFkZB58hfk7YXZwjLFm2sJMsLwCGwoTWbSpoxxYfsRqFgf2mOP3OJXPoGLCusgU',
+    { alt: 'Okomiti PEJDO.COM logo u bijeloj boji', skip: true },
+  ],
+  [
+    'AP1GczPGJH2LXakahCbqNr7u5hNq65OnvFg913mrdvM5gqblO0uFwGrhWrnPZWWLgnqutLk-KD1n5_sVYnprkbhfzbvjhK-BZZJMeRtyW8UY_w2RAQkvhV4',
+    { alt: 'Vodoravni PEJDO.COM logo u bijeloj boji', skip: true },
+  ],
+  [
+    'AP1GczOZM6vLEIqSCTvoB-clPRpRogOqfg8MSL1rjqv6ud65BtROveoYme4aQAjRIl-EVeNScJqb7dZSB8fLTzEbY8TNAI0kH7-yoPvlj0ALSO7ygCQGRgU',
+    { alt: 'Vodoravni PEJDO.COM logo u plavoj boji', caption: 'Vodoravna verzija — plava' },
+  ],
+  [
+    'AP1GczNkKvd5KLHYUqgZqcx3yFq1eOs0sbHnHVpGqoF2qlpAyS9UFWdTYq6_xYDmxB57g5ZXIk__m2m5URmg3YpEMj4UFWKJ5FP2NGP-Lix4Y4wL3XQOBGI',
+    { alt: 'PEJDO.COM znak u plavoj boji', caption: 'Znak — plavi' },
+  ],
+  [
+    'AP1GczMFHBAzqrg3gFr-PieornLi6TGRQ5hLMG5QchrpfkFG05JfsMPwp5n85Lv49zjtCMy_WL1ZoNajgNydJpO8QrMCQps4ReEAgvVvdN_R58TuI0Vo57k',
+    { alt: 'Okomiti PEJDO.COM logo u plavoj boji', caption: 'Okomita verzija — plava' },
+  ],
+]);
+
+/** Google's stable per-photo id - the CDN path segment after /pw/. */
+function photoId(baseUrl: string): string {
+  return baseUrl.split('/pw/')[1] ?? baseUrl;
+}
+
+const remotePhotos: SlideshowPhoto[] = googlePhotos
+  .map((photo, index) => {
+    const described = descriptions.get(photoId(photo.baseUrl));
+    if (described?.skip) return null;
+
+    return {
+      src: googlePhotoUrl(photo.baseUrl, 1600),
+      thumbnail: googlePhotoUrl(photo.baseUrl, 240),
+      alt: described?.alt ?? `Slika ${index + 1} iz albuma`,
+      caption: described?.caption,
+      width: photo.width,
+      height: photo.height,
+    } satisfies SlideshowPhoto;
+  })
+  .filter((photo): photo is SlideshowPhoto => photo !== null);
+
+// Fallback photos. Add files to public/photos/ and describe them here.
+const localPhotos: SlideshowPhoto[] = [];
+
+const photos = remotePhotos.length > 0 ? remotePhotos : localPhotos;
+---
+
+<BaseLayout
+  title="Fotos"
+  description="Galerija u obliku slideshowa - PEJDO.COM logo u vodoravnoj i okomitoj verziji te samostalni znak, povezano s Google Photos albumom."
+>
+  <section class="pt-12 pb-6 md:pt-16 md:pb-8 px-6">
+    <div class="container max-w-3xl mx-auto text-center" data-animate>
+      <h1 class="font-serif text-4xl font-bold leading-[1.1] md:text-5xl">Fotos</h1>
+    </div>
+  </section>
+
+  {
+    photos.length > 0 ? (
+      <Slideshow
+        photos={photos}
+        fit="contain"
+        stage="canvas"
+        spacing="tight"
+        autoplay
+        interval={6000}
+        label="Galerija — PEJDO.COM logo"
+      />
+    ) : (
+      <section class="pb-20 px-6">
+        <div class="container max-w-2xl mx-auto rounded-xl border bg-card p-8 text-center">
+          <h2 class="text-xl font-semibold">Album još nije povezan</h2>
+          <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
+            Postavite <code class="font-mono">PUBLIC_GOOGLE_PHOTOS_ALBUM_URL</code> u
+            <code class="font-mono">.env</code> na javno podijeljeni Google Photos album, ili
+            dodajte fotografije u <code class="font-mono">public/photos/</code> i popišite ih u
+            <code class="font-mono">src/pages/fotos.astro</code>. Upute su u
+            <code class="font-mono">.env.example</code>.
+          </p>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

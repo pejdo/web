@@ -1,7 +1,8 @@
 {
-  "name": "astrodeck",
+  "name": "pejdo-com",
   "type": "module",
   "version": "3.4.0",
+  "author": "Nikola Pejdo <nikola@pejdo.com>",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

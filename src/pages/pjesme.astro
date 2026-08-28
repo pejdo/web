@@ -1,0 +1,426 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Pjesma {
+  /** Naslov pjesme */
+  title: string;
+  /** Pjesnik */
+  poet: string;
+  /** Godine rođenja i smrti pjesnika */
+  life: string;
+  /** Godina objave pjesme */
+  year: string;
+  /**
+   * Cjeloviti tekst pjesme, stih po stih. Prazan red razdvaja kitice.
+   * Renderira se kroz whitespace-pre-wrap, pa se čuvaju i prijelomi
+   * stihova i uvlake na početku stiha (npr. u Preradovićevu „Putniku”).
+   */
+  text?: string;
+  /** Zbirka u kojoj je pjesma prvi put objavljena */
+  collection?: string;
+  /** Vanjski izvor cjelovitog teksta (poezija.hr) */
+  sourceUrl?: string;
+}
+
+// Tekstovi se upisuju u polje `text` i preuzimaju iz tiskanog ili
+// provjerenog izvora. Dok tekst nije upisan, kartica vodi na poezija.hr.
+const pjesme: Pjesma[] = [
+  {
+    title: 'Notturno',
+    poet: 'Antun Gustav Matoš',
+    life: '1873 — 1914',
+    year: '1912',
+    text: `Mlačna noć; u selu lavež; kasan
+Ćuk il netopir;
+Ljubav cvijeća – miris jak i strasan
+Slavi tajni pir.
+
+Sitni cvrčak sjetno cvrči, jasan
+Kao srebren vir;
+Teške oči sklapaju se na san,
+S neba rosi mir.
+
+S mrkog tornja bat
+Broji pospan sat,
+Blaga svjetlost sipi sa visinâ;
+
+Kroz samoću, muk,
+Sve je tiši huk:
+Željeznicu guta već daljina.`,
+  },
+  {
+    title: 'Jesenje veče',
+    poet: 'Antun Gustav Matoš',
+    life: '1873 — 1914',
+    year: '1909',
+    sourceUrl: 'https://www.poezija.hr/jesenje-vece-antun-gustav-matos/',
+  },
+  {
+    title: '1909',
+    poet: 'Antun Gustav Matoš',
+    life: '1873 — 1914',
+    year: '1909',
+    sourceUrl: 'https://www.poezija.hr/1909-antun-gustav-matos/',
+  },
+  {
+    title: 'Svakidašnja jadikovka',
+    poet: 'Tin Ujević',
+    life: '1891 — 1955',
+    year: '1920',
+    sourceUrl: 'https://www.poezija.hr/',
+  },
+  {
+    title: 'Kolajna',
+    poet: 'Tin Ujević',
+    life: '1891 — 1955',
+    year: '1926',
+    sourceUrl: 'https://www.poezija.hr/',
+  },
+  {
+    title: 'Moj dom',
+    poet: 'Silvije Strahimir Kranjčević',
+    life: '1865 — 1908',
+    year: '1898',
+    sourceUrl: 'https://www.poezija.hr/moj-dom-silvije-strahimir-kranjcevic/',
+  },
+  {
+    title: 'Gospodskom Kastoru',
+    poet: 'Silvije Strahimir Kranjčević',
+    life: '1865 — 1908',
+    year: '1902',
+    sourceUrl: 'https://www.poezija.hr/gospodskomu-kastoru-silvije-strahimir-kranjcevic/',
+  },
+  {
+    title: 'Rodu o jeziku',
+    poet: 'Petar Preradović',
+    life: '1818 — 1872',
+    year: '1860',
+    sourceUrl: 'https://www.poezija.hr/',
+  },
+  {
+    title: 'Smrt Smail-age Čengića',
+    poet: 'Ivan Mažuranić',
+    life: '1814 — 1890',
+    year: '1846',
+    sourceUrl: 'https://www.poezija.hr/',
+  },
+  {
+    title: 'Putnik',
+    poet: 'Petar Preradović',
+    life: '1818 — 1872',
+    year: '1846',
+    text: `Bože mili, kud sam zašo!
+   Noć me stigla u tuđini,
+   Ne znam puta, ne znam staze,
+   Svuda goli kamen gaze,
+   Trudne noge po pustinji!
+
+Još konaka nijesam našo!
+   Sjever brije s snježnog brda,
+   A tuđincu, siromaku
+   Još je veći mrak u mraku,
+   Još je tvrđa zemlja tvrda!
+
+Naokolo magla pada,
+   Zastrta je mjesečina,
+   Ne vidi se zvijezdam traga;
+   Majko mila, majko draga,
+   Da ti vidiš svoga sina!
+
+Da ti vidiš njega sada
+   Okružena bijedom svega,
+   Ti bi gorko zaplakala,
+   Ruka bi ti zadrhtala
+   Od žalosti - grleć njega!
+
+Zašto tebe nijesam slušo,
+   Kad si meni govorila:
+   "Ne idi sinko od matere,
+   Koja mekan krevet stere
+   Tebi usrjed svoga krila!
+
+Ne idi, sinko, draga dušo,
+   Ne idi od krova očinoga,
+   Tuđa zemlja ima svoje,
+   Ne spoznaje jade tvoje,
+   Tuđa ljubav ljubi svoga!" -
+
+Govoreći sobom tako,
+   K kolibici jednoj klima,
+   Koju spazi iznenada,
+   Umoreni putnik sada,
+   I zakuca na vratima.
+
+Otvarajuć sve polako,
+   Zamišljena: tko će biti?
+   Glavu pruži jedna stara.
+   „Daj u ime Božjeg dara,
+   Bako, meni prenoćiti!
+
+Ne znam gdje sam - kud sam zašo,
+   Noć me 'e stigla u tuđini,
+   Ne znam puta, ne znam staze,
+   Svuda goli kamen gaze,
+   Trudne noge po pustinji!
+
+Drugi konak gdje bih našo!
+   Sjever brije s snježnog brda,
+   A tuđincu, siromaku
+   Još je veći mrak u mraku,
+   Još je tvrđa zemlja tvrda.
+
+Naokolo magla pada
+   Zastrta je mjesečina,
+   Ne vidi se zvijezdam traga,
+   Majko mila, majko draga,
+   Primi pod krov tuđeg sina!"
+
+„Primila bih tebe rada;
+   Ali vidiš da spavaju
+   Ovdje sinka tri i ćerce,
+   Koji cijelo majke srce
+   I svu kuću ispunjaju!"
+
+„Nij' daleko već do dana,
+   Već pozdravlja pijevac vile,
+   Dok zagrije danak Boži,
+   Malo vatre bar naloži,
+   Da otopim smrzle žile!"
+
+„Vatra mi je zapretana,
+   Drvah ne imam skoro ništa,
+   Ovo malo, što 'e unutra,
+   Trijeba mojoj djeci sjutra
+   Kad se skupe kod ognjišta!"
+
+„Za tuđinca ništa ne imaš,
+   Tuđa majko, kad te moli,
+   Tuđe dijete tvoje nije!" -
+   S tim mu grozne suze dvije
+   Niza lice kapnu doli.
+
+„Gdje su ruke tvoje majke
+   Sad da skupe suze sina?
+   Gdje koljeno, da počine,
+   Da si teško breme skine?
+   Gdje je tvoja domovina?!"
+
+Ko da su mu zmije ljute
+   S ovim riječ'ma srce stisle,
+   Ukočeni putnik stoji,
+   Leden znoj mu čelo znoji
+   I otimlje mozgu misle.
+
+Ali oči uzdignute
+   K strani glede - ah onamo!
+   Gdje od drage domovine
+   Svako jutro sunce sine,
+   Tam' ga želja nosi - tamo!
+
+„Tebi opet duša diše,
+   Tebi srce opet bije;
+   Domovino, majko srjeće!
+   K tebi opet sin se kreće,
+   Od radosti suze lije!
+
+Primi opet svoje dijete,
+   Primi vijek će tvoje biti,
+   Ljubit tebe svako doba,
+   U tvom polju daj mu groba,
+   S tvojim cvijećem grom mu kiti!"`,
+    collection: 'Prvenci',
+  },
+  {
+    title: 'Opomena',
+    poet: 'Antun Branko Šimić',
+    life: '1898 — 1925',
+    year: '1920',
+    text: `Čovječe pazi
+da ne ideš malen
+ispod zvijezda!
+
+Pusti
+da cijelog tebe prođe
+blaga svjetlost zvijezda!
+
+Da ni za čim ne žališ
+kad se budeš zadnjim pogledima
+rastajo od zvijezda!
+
+Na svom koncu
+mjesto u prah
+prijeđi sav u zvijezde!`,
+  },
+  {
+    title: 'Balada iz predgrađa',
+    poet: 'Dobriša Cesarić',
+    life: '1902 — 1980',
+    year: '1930',
+    text: `I lije na uglu petrolejska lampa
+svijetlost crvenkastožutu
+na debelo blato kraj staroga plota
+i dvije, tri cigle na putu.
+
+I uvijek ista sirotinja uđje
+u njezinu svjetlost iz mraka,
+i s licem na kojem su obično brige
+pređe je u par koraka.
+
+A jedne večeri nekoga nema,
+a morao bi proć;
+I lampa gori,
+i gori u magli,
+i već je noć.
+
+I nema ga sutra, ni prekosutra ne,
+i vele da bolestan leži,
+i nema ga mjesec, i nema ga dva,
+i zima je već,
+i sniježi.
+
+A prolaze kao i dosad ljudi,
+i maj već mirise -
+a njega nema, i nema, i nema,
+i nema ga više.
+
+I lije na uglu petrolejska lampa
+svijetlost crvenkastožutu
+na debelo blato kraj staroga plota
+i dvije, tri cigle na putu.`,
+  },
+];
+---
+
+<BaseLayout
+  title="Pjesme"
+  description="Dvanaest najpoznatijih hrvatskih pjesama — od Mažuranića i Preradovića do Matoša, Ujevića i Cesarića."
+>
+  <div class="container max-w-3xl mx-auto py-16 px-6">
+    <header class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Pjesme</h1>
+      <p class="text-lg text-muted-foreground">
+        Dvanaest pjesama koje čine jezgru hrvatske pjesničke tradicije — od romantizma i narodnog
+        pokreta do moderne.
+      </p>
+    </header>
+
+    <ol class="space-y-6" data-animate="fade">
+      {
+        pjesme.map((pjesma, index) => (
+          <li class="rounded-lg border bg-card p-6 md:p-8">
+            <div class="flex items-start gap-4">
+              <span
+                class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground"
+                aria-hidden="true"
+              >
+                {index + 1}
+              </span>
+              <div class="min-w-0 flex-1">
+                <h2 class="text-lg md:text-xl font-semibold text-foreground">{pjesma.title}</h2>
+                <p class="text-sm text-muted-foreground mt-1">
+                  {pjesma.poet} <span aria-hidden="true">·</span> {pjesma.life}{' '}
+                  <span aria-hidden="true">·</span> {pjesma.year}
+                  {pjesma.collection && (
+                    <>
+                      {' '}
+                      <span aria-hidden="true">·</span> zbirka „{pjesma.collection}”
+                    </>
+                  )}
+                </p>
+
+                {pjesma.text ? (
+                  <details class="pjesma group mt-5">
+                    <summary class="inline-flex cursor-pointer items-center gap-1.5 rounded-md text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background py-1">
+                      <svg
+                        class="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-open:rotate-90"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 6l6 6-6 6" />
+                      </svg>
+                      <span class="group-open:hidden">Prikaži pjesmu</span>
+                      <span class="hidden group-open:inline">Sakrij pjesmu</span>
+                    </summary>
+                    <div class="pjesma-body overflow-hidden">
+                      <blockquote class="mt-4 border-l-2 border-primary/40 pl-5 text-foreground whitespace-pre-wrap leading-relaxed">
+                        {pjesma.text}
+                      </blockquote>
+                    </div>
+                  </details>
+                ) : (
+                  pjesma.sourceUrl && (
+                    <p class="mt-5">
+                      <a
+                        href={pjesma.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition-colors py-1"
+                      >
+                        Pročitaj cijelu pjesmu na poezija.hr
+                        <svg
+                          class="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        </svg>
+                      </a>
+                    </p>
+                  )
+                )}
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="mt-12 text-sm text-muted-foreground border-t pt-6">
+      Tekstovi pjesama objavljeni su u svrhu čitanja i obrazovanja. Autorska prava na pojedina djela
+      pripadaju autorima i njihovim nasljednicima.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Smooth height transition from 0 to auto, same approach as the FAQ section */
+  .pjesma {
+    interpolate-size: allow-keywords;
+  }
+
+  .pjesma-body {
+    height: 0;
+    transition: height 0.3s ease;
+  }
+
+  .pjesma[open] .pjesma-body {
+    height: auto;
+  }
+
+  /* Remove the default disclosure marker in all browsers */
+  .pjesma summary {
+    list-style: none;
+  }
+
+  .pjesma summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pjesma-body {
+      transition: none;
+    }
+  }
+</style>

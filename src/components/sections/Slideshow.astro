@@ -1,0 +1,487 @@
+---
+/**
+ * Slideshow Section Component
+ *
+ * Accessible photo slideshow with a thumbnail strip, keyboard navigation,
+ * optional autoplay, and swipe support. Renders as a plain list of images if
+ * JavaScript is unavailable, so every photo stays reachable.
+ *
+ * @example
+ * ```astro
+ * <Slideshow
+ *   title="Fotografije"
+ *   subtitle="Odabrane fotografije"
+ *   photos={[
+ *     { src: "/photos/kamen.jpg", alt: "Kameni zid na suncu", width: 1600, height: 1067 }
+ *   ]}
+ *   autoplay
+ *   interval={6000}
+ * />
+ * ```
+ *
+ * @customization
+ * - Aspect ratio: change aspect-[3/2] on the stage wrapper
+ * - Autoplay speed: interval prop (milliseconds)
+ * - Thumbnail size: adjust w-20 h-14 on the thumbnail buttons
+ */
+
+export interface SlideshowPhoto {
+  /** Full-size image URL */
+  src: string;
+  /** Descriptive alt text. Required - the gallery is content, not decoration. */
+  alt: string;
+  /** Smaller source for the thumbnail strip. Falls back to src. */
+  thumbnail?: string;
+  /** Intrinsic width in pixels, used to reserve layout space */
+  width?: number;
+  /** Intrinsic height in pixels, used to reserve layout space */
+  height?: number;
+  /** Optional caption shown below the image */
+  caption?: string;
+}
+
+interface Props {
+  /** Section heading, rendered as h2 */
+  title?: string;
+  /** Supporting text below the heading */
+  subtitle?: string;
+  /** Photos in display order */
+  photos: SlideshowPhoto[];
+  /**
+   * How each image fills the stage.
+   * - 'cover' crops to fill, right for photographs
+   * - 'contain' fits the whole image without cropping, right for logos,
+   *   artwork, and mixed aspect ratios
+   */
+  fit?: 'cover' | 'contain';
+  /**
+   * Background of the image stage.
+   * - 'muted' follows the theme, right for photographs
+   * - 'canvas' stays light in both themes, right for images with a baked-in
+   *   white background such as JPEG logos
+   */
+  stage?: 'muted' | 'canvas';
+  /**
+   * Vertical rhythm of the section.
+   * - 'default' is the standard section padding
+   * - 'tight' removes the top padding, for when the slideshow sits directly
+   *   below a page heading and should not add a second gap
+   */
+  spacing?: 'default' | 'tight';
+  /** Advance automatically. Disabled for users who prefer reduced motion. */
+  autoplay?: boolean;
+  /** Milliseconds between automatic slides */
+  interval?: number;
+  /** Accessible label for the whole carousel region */
+  label?: string;
+}
+
+const {
+  title,
+  subtitle,
+  photos,
+  fit = 'cover',
+  stage = 'muted',
+  spacing = 'default',
+  autoplay = false,
+  interval = 6000,
+  label = 'Galerija fotografija',
+} = Astro.props;
+
+const imageFitClass = fit === 'contain' ? 'object-contain' : 'object-cover';
+const stageClass = stage === 'canvas' ? 'bg-image-canvas' : 'bg-muted';
+const sectionSpacingClass = spacing === 'tight' ? 'pb-16 md:pb-24 px-6' : 'py-16 md:py-24 px-6';
+
+// A unique id per instance keeps multiple slideshows on one page independent.
+const uid = `slideshow-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+{
+  photos.length > 0 && (
+    <section class:list={[sectionSpacingClass]}>
+      <div class="container max-w-5xl mx-auto">
+        {(title || subtitle) && (
+          <div class="flex flex-col items-center space-y-4 text-center mb-12" data-animate>
+            {title && (
+              <h2 class="font-serif text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
+                {title}
+              </h2>
+            )}
+            {subtitle && (
+              <p class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+                {subtitle}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div
+          class="slideshow"
+          id={uid}
+          data-slideshow
+          data-autoplay={autoplay ? 'true' : 'false'}
+          data-interval={String(interval)}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={label}
+          data-animate
+        >
+          {/* Stage */}
+          <div class:list={['relative overflow-hidden rounded-xl border aspect-[3/2]', stageClass]}>
+            {photos.map((photo, index) => (
+              <figure
+                class="slide absolute inset-0 flex flex-col"
+                data-slide
+                data-index={String(index)}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} od ${photos.length}`}
+                aria-hidden={index === 0 ? undefined : 'true'}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  class:list={['h-full w-full', imageFitClass]}
+                />
+                {photo.caption && (
+                  <figcaption
+                    class:list={[
+                      'absolute inset-x-0 bottom-0 px-4 py-3 text-sm backdrop-blur',
+                      // On the light canvas the caption must stay dark-on-light
+                      // regardless of theme, or it would be unreadable.
+                      stage === 'canvas'
+                        ? 'bg-image-canvas/85 text-kamen-foreground'
+                        : 'bg-background/80 text-foreground',
+                    ]}
+                  >
+                    {photo.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+
+            {/* Controls - only useful with JS, hidden until the script enables them */}
+            <button
+              type="button"
+              data-slideshow-prev
+              hidden
+              class="absolute left-3 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background/90 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <span class="sr-only">Prethodna fotografija</span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              data-slideshow-next
+              hidden
+              class="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-background/90 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <span class="sr-only">Sljedeća fotografija</span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </button>
+
+            {autoplay && (
+              <button
+                type="button"
+                data-slideshow-toggle
+                hidden
+                aria-pressed="false"
+                class="absolute right-3 top-3 inline-flex h-9 items-center gap-2 rounded-full border bg-background/90 px-3 text-xs font-medium text-foreground shadow-sm backdrop-blur transition-colors hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                <span data-slideshow-toggle-label>Pauziraj</span>
+              </button>
+            )}
+          </div>
+
+          {/* Live region: announces slide changes to screen readers */}
+          <p class="sr-only" aria-live="polite" data-slideshow-status />
+
+          {/* Thumbnail strip doubles as the slide picker */}
+          <div
+            class="mt-4 flex gap-2 overflow-x-auto pb-2"
+            role="tablist"
+            aria-label="Odaberi fotografiju"
+          >
+            {photos.map((photo, index) => (
+              <button
+                type="button"
+                role="tab"
+                data-slideshow-thumb
+                data-index={String(index)}
+                aria-selected={index === 0 ? 'true' : 'false'}
+                aria-controls={uid}
+                class:list={[
+                  'slideshow-thumb h-14 w-20 shrink-0 overflow-hidden rounded-md border transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                  stageClass,
+                ]}
+              >
+                <img
+                  src={photo.thumbnail ?? photo.src}
+                  alt={`Prikaži: ${photo.alt}`}
+                  loading="lazy"
+                  decoding="async"
+                  class:list={[
+                    'h-full w-full',
+                    fit === 'contain' ? 'object-contain' : 'object-cover',
+                  ]}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  /* Without JavaScript every slide stacks vertically, so no photo is lost. */
+  .slideshow:not([data-ready]) .slide {
+    position: relative;
+    inset: auto;
+  }
+
+  .slideshow:not([data-ready]) > div:first-of-type {
+    aspect-ratio: auto;
+    height: auto;
+  }
+
+  .slideshow:not([data-ready]) .slide + .slide {
+    margin-top: 0.5rem;
+  }
+
+  /* JS-enabled: cross-fade between slides */
+  .slideshow[data-ready] .slide {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.5s ease,
+      visibility 0.5s ease;
+  }
+
+  .slideshow[data-ready] .slide[data-active] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .slideshow-thumb {
+    opacity: 0.55;
+  }
+
+  .slideshow-thumb:hover,
+  .slideshow-thumb[aria-selected='true'] {
+    opacity: 1;
+  }
+
+  .slideshow-thumb[aria-selected='true'] {
+    border-color: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slideshow[data-ready] .slide {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  interface SlideshowState {
+    index: number;
+    timer: number | null;
+    /** True when the visitor explicitly paused via the button or a control. */
+    userPaused: boolean;
+  }
+
+  /**
+   * Wires up a single slideshow element.
+   *
+   * Sets data-ready, which switches the CSS from the no-JS stacked fallback to
+   * the cross-fading carousel, then binds controls, keyboard, and swipe.
+   */
+  function initSlideshow(root: HTMLElement): void {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    if (slides.length === 0) return;
+
+    const prevButton = root.querySelector<HTMLButtonElement>('[data-slideshow-prev]');
+    const nextButton = root.querySelector<HTMLButtonElement>('[data-slideshow-next]');
+    const toggleButton = root.querySelector<HTMLButtonElement>('[data-slideshow-toggle]');
+    const toggleLabel = root.querySelector<HTMLElement>('[data-slideshow-toggle-label]');
+    const status = root.querySelector<HTMLElement>('[data-slideshow-status]');
+    const thumbs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-slideshow-thumb]'));
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const interval = Math.max(2000, Number(root.dataset.interval) || 6000);
+    const autoplayWanted = root.dataset.autoplay === 'true' && !reducedMotion && slides.length > 1;
+
+    const state: SlideshowState = { index: 0, timer: null, userPaused: false };
+
+    root.setAttribute('data-ready', '');
+    if (slides.length > 1) {
+      prevButton?.removeAttribute('hidden');
+      nextButton?.removeAttribute('hidden');
+    }
+
+    function render(): void {
+      slides.forEach((slide, i) => {
+        const isActive = i === state.index;
+        slide.toggleAttribute('data-active', isActive);
+        if (isActive) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+
+      thumbs.forEach((thumb, i) => {
+        thumb.setAttribute('aria-selected', String(i === state.index));
+      });
+
+      if (status) status.textContent = `Fotografija ${state.index + 1} od ${slides.length}`;
+    }
+
+    function goTo(next: number): void {
+      state.index = (next + slides.length) % slides.length;
+      render();
+    }
+
+    /** Stops the timer without changing the visitor's play/pause intent. */
+    function suspend(): void {
+      if (state.timer !== null) {
+        window.clearInterval(state.timer);
+        state.timer = null;
+      }
+    }
+
+    /** Starts the timer unless autoplay is off or the visitor paused it. */
+    function resume(): void {
+      if (!autoplayWanted || state.userPaused || state.timer !== null) return;
+      state.timer = window.setInterval(() => goTo(state.index + 1), interval);
+    }
+
+    /** Reflects the visitor's intent on the toggle button. */
+    function setUserPaused(paused: boolean): void {
+      state.userPaused = paused;
+      toggleButton?.setAttribute('aria-pressed', String(paused));
+      if (toggleLabel) toggleLabel.textContent = paused ? 'Pokreni' : 'Pauziraj';
+      if (paused) suspend();
+      else resume();
+    }
+
+    prevButton?.addEventListener('click', () => {
+      setUserPaused(true);
+      goTo(state.index - 1);
+    });
+
+    nextButton?.addEventListener('click', () => {
+      setUserPaused(true);
+      goTo(state.index + 1);
+    });
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        setUserPaused(true);
+        goTo(Number(thumb.dataset.index));
+      });
+    });
+
+    if (autoplayWanted && toggleButton) {
+      toggleButton.removeAttribute('hidden');
+      toggleButton.addEventListener('click', () => setUserPaused(!state.userPaused));
+    }
+
+    // Arrow keys work whenever focus is inside the carousel.
+    root.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      setUserPaused(true);
+      goTo(state.index + (event.key === 'ArrowRight' ? 1 : -1));
+    });
+
+    // Pause while the pointer or keyboard focus rests on the carousel, then
+    // resume on leave - without overwriting an explicit pause.
+    root.addEventListener('mouseenter', suspend);
+    root.addEventListener('focusin', suspend);
+    root.addEventListener('mouseleave', () => {
+      if (!root.contains(document.activeElement)) resume();
+    });
+    root.addEventListener('focusout', () => {
+      if (!root.matches(':hover')) resume();
+    });
+
+    // Horizontal swipe on touch devices.
+    let touchStartX: number | null = null;
+    root.addEventListener(
+      'touchstart',
+      (event: TouchEvent) => {
+        touchStartX = event.touches[0]?.clientX ?? null;
+      },
+      { passive: true }
+    );
+    root.addEventListener(
+      'touchend',
+      (event: TouchEvent) => {
+        if (touchStartX === null) return;
+        const delta = (event.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
+        touchStartX = null;
+        if (Math.abs(delta) < 40) return;
+        setUserPaused(true);
+        goTo(state.index + (delta < 0 ? 1 : -1));
+      },
+      { passive: true }
+    );
+
+    // Do not animate in a background tab. AbortSignal tied to the element keeps
+    // this document-level listener from outliving the slideshow across view
+    // transitions.
+    if (autoplayWanted) {
+      const controller = new AbortController();
+      document.addEventListener(
+        'visibilitychange',
+        () => {
+          if (document.hidden) suspend();
+          else resume();
+        },
+        { signal: controller.signal }
+      );
+      document.addEventListener('astro:before-swap', () => controller.abort(), { once: true });
+    }
+
+    render();
+    resume();
+  }
+
+  function initAllSlideshows(): void {
+    document
+      .querySelectorAll<HTMLElement>('[data-slideshow]:not([data-ready])')
+      .forEach(initSlideshow);
+  }
+
+  initAllSlideshows();
+  document.addEventListener('astro:after-swap', initAllSlideshows);
+</script>

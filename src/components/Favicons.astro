@@ -1,0 +1,30 @@
+---
+/**
+ * Favicons Component
+ *
+ * Centralized favicon and app icon declarations. Kept in one place so all
+ * layouts stay in sync.
+ *
+ * The SVG favicon is theme-aware (blue in light mode, white in dark mode via
+ * prefers-color-scheme) and is preferred by modern browsers. The ICO and PNG
+ * variants are fallbacks for older browsers and platform-specific surfaces.
+ *
+ * @example
+ * ```astro
+ * <Favicons />
+ * ```
+ */
+---
+
+<!-- Modern browsers: scalable, theme-aware -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<!-- Fallback for browsers without SVG favicon support -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="alternate icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+<!-- iOS home screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<!-- Android / PWA -->
+<!-- Note: theme-color is intentionally NOT set here. SEO.astro already emits
+     light/dark theme-color meta tags matching the page background. -->
+<link rel="manifest" href="/site.webmanifest" />

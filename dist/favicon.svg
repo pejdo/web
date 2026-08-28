@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="74.39 17.28 212.47 212.47" role="img" aria-label="PEJDO.COM">
+  <title>PEJDO.COM</title>
+  <style>
+    @media (prefers-color-scheme: dark) { .mark { fill: #ffffff } }
+  </style>
+  <path class="mark" fill="#223F99" fill-rule="evenodd" d="M 78.47999999999999 123.52 a 102.15 102.15 0 1 0 204.3 0 a 102.15 102.15 0 1 0 -204.3 0 Z M 116.63 123.52 a 26.0 26.0 0 1 0 52.0 0 a 26.0 26.0 0 1 0 -52.0 0 Z M 192.63 123.52 a 26.0 26.0 0 1 0 52.0 0 a 26.0 26.0 0 1 0 -52.0 0 Z"/>
 </svg>

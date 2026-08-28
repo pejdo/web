@@ -5,7 +5,7 @@
     {
       "name": "Hero",
       "file": "src/components/sections/Hero.astro",
-      "description": "Large centered hero with headline, subtitle, optional badge linking to /changelog, primary and secondary CTA buttons, and a decorative GitHub contribution-style SVG grid background. Title appends version number to the badge automatically.",
+      "description": "Large centered hero with headline, subtitle, optional badge linking to /latinski, primary and secondary CTA buttons, and a decorative GitHub contribution-style SVG grid background. Title appends version number to the badge automatically.",
       "variants": 1,
       "props": {
         "title": {
@@ -21,7 +21,7 @@
         "badge": {
           "type": "string",
           "required": false,
-          "description": "When provided, shows a pill badge linking to /changelog. The badge text is split: left side shows the hardcoded version 'v3.0.0', right side shows this prop value"
+          "description": "When provided, shows a pill badge linking to /latinski. The badge text is split: left side shows the hardcoded version 'v3.0.0', right side shows this prop value"
         },
         "primaryCta": {
           "type": "{ href: string; label: string }",
@@ -364,6 +364,78 @@
       "features": ["responsive", "dark-mode", "accessible", "semantic-html"],
       "category": "contact",
       "notes": "Form action='#' — connect to your own backend. Required fields marked with red asterisk. Uses native HTML form elements (no React). Stacked on mobile, side-by-side on desktop."
+    },
+    {
+      "name": "Slideshow",
+      "file": "src/components/sections/Slideshow.astro",
+      "description": "Photo slideshow with a 3:2 stage, cross-fading slides, thumbnail strip that doubles as a slide picker, arrow-key navigation, touch swipe, and optional autoplay with a pause control. Without JavaScript the slides stack vertically so every photo stays reachable.",
+      "variants": 1,
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Section heading rendered as h2 in the serif font"
+        },
+        "subtitle": {
+          "type": "string",
+          "required": false,
+          "description": "Supporting text below the heading"
+        },
+        "photos": {
+          "type": "Array<{ src: string; alt: string; thumbnail?: string; width?: number; height?: number; caption?: string }>",
+          "required": true,
+          "description": "Photos in display order. alt is required. thumbnail falls back to src; supply a smaller image to keep the strip light. The section renders nothing when the array is empty."
+        },
+        "fit": {
+          "type": "'cover' | 'contain'",
+          "required": false,
+          "default": "cover",
+          "description": "How each image fills the stage. 'cover' crops to fill (photographs); 'contain' fits the whole image without cropping (logos, artwork, mixed aspect ratios)."
+        },
+        "stage": {
+          "type": "'muted' | 'canvas'",
+          "required": false,
+          "default": "muted",
+          "description": "Stage background. 'muted' follows the theme; 'canvas' uses --color-image-canvas, which stays light in both themes for images with a baked-in white background such as JPEG logos. Thumbnails and captions follow the same choice."
+        },
+        "spacing": {
+          "type": "'default' | 'tight'",
+          "required": false,
+          "default": "default",
+          "description": "Vertical rhythm. 'default' uses the standard py-16 md:py-24 section padding; 'tight' drops the top padding so the slideshow sits directly below a page heading without a doubled gap."
+        },
+        "autoplay": {
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Advance automatically. Ignored when the visitor prefers reduced motion or there is only one photo."
+        },
+        "interval": {
+          "type": "number",
+          "required": false,
+          "default": "6000",
+          "description": "Milliseconds between automatic slides, clamped to a 2000 minimum"
+        },
+        "label": {
+          "type": "string",
+          "required": false,
+          "default": "Galerija fotografija",
+          "description": "Accessible label for the carousel region"
+        }
+      },
+      "features": [
+        "responsive",
+        "dark-mode",
+        "accessible",
+        "semantic-html",
+        "keyboard-navigation",
+        "reduced-motion-aware",
+        "no-js-fallback",
+        "lazy-loading",
+        "view-transitions-safe"
+      ],
+      "category": "media",
+      "notes": "Autoplay pauses on hover and focus and resumes on leave; the pause button records an explicit intent that hover no longer overrides. First slide loads eager, the rest lazy. Slide changes are announced through an aria-live region. Used by src/pages/fotos.astro, which sources images from a public Google Photos album via src/lib/googlePhotos.ts and uses fit='contain' with stage='canvas'."
     }
   ],
   "ui": [
