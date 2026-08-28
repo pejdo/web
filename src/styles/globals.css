@@ -68,14 +68,17 @@
 
   /* ===== Regional palette (Croatian / Herzegovinian) =====
      kamen    — topli vapnenac, kamen dalmatinskih i hercegovackih zidova
-     terakota — crvena iz sahovnice i kupe na krovovima
+     klein    — Klein blue (IKB), akcentna boja stranice
      more     — jadranska plava
      maslina  — siva zelen masline i smilja
      zlato    — zito, suho polje, ljetno svjetlo */
   --color-kamen: oklch(94% 0.008 85);
   --color-kamen-foreground: oklch(25% 0.015 70);
-  --color-terakota: oklch(52% 0.17 28);
-  --color-terakota-foreground: oklch(98% 0.005 80);
+  /* International Klein Blue, IKB (hex 002FA7, converted to OKLCH). Contrast on
+     the light background is 10.66:1, and 10.06:1 for the foreground colour on
+     top of it, so it is safe for small text and as a button fill. */
+  --color-klein: oklch(37.9% 0.195 263.2);
+  --color-klein-foreground: oklch(98% 0.005 80);
   --color-more: oklch(45% 0.09 230);
   --color-maslina: oklch(48% 0.055 125);
   --color-zlato: oklch(62% 0.1 80);
@@ -156,8 +159,11 @@
      stay legible against a near-black background */
   --color-kamen: oklch(16% 0.01 70);
   --color-kamen-foreground: oklch(92% 0.01 80);
-  --color-terakota: oklch(62% 0.15 28);
-  --color-terakota-foreground: oklch(12% 0.01 40);
+  /* Klein blue lightened for dark mode. True IKB is only 1.97:1 against the
+     near-black background, far below the 4.5:1 minimum; this reads as the same
+     blue while giving 6.37:1 on the background and 6.16:1 for text on top. */
+  --color-klein: oklch(65% 0.16 263.2);
+  --color-klein-foreground: oklch(12% 0.01 263);
   --color-more: oklch(65% 0.1 230);
   --color-maslina: oklch(66% 0.06 125);
   --color-zlato: oklch(75% 0.1 80);
@@ -214,17 +220,17 @@ mark {
   background-image:
     linear-gradient(
       45deg,
-      var(--color-terakota) 25%,
+      var(--color-klein) 25%,
       transparent 25%,
       transparent 75%,
-      var(--color-terakota) 75%
+      var(--color-klein) 75%
     ),
     linear-gradient(
       45deg,
-      var(--color-terakota) 25%,
+      var(--color-klein) 25%,
       transparent 25%,
       transparent 75%,
-      var(--color-terakota) 75%
+      var(--color-klein) 75%
     );
   background-size: 1.5rem 1.5rem;
   background-position:
@@ -238,7 +244,7 @@ mark {
   height: 2px;
   background-image: repeating-linear-gradient(
     90deg,
-    var(--color-terakota) 0 0.5rem,
+    var(--color-klein) 0 0.5rem,
     transparent 0.5rem 0.75rem,
     var(--color-zlato) 0.75rem 1.25rem,
     transparent 1.25rem 1.5rem
@@ -254,7 +260,7 @@ mark {
   font-weight: 700;
   padding-right: 0.5rem;
   padding-top: 0.25rem;
-  color: var(--color-terakota);
+  color: var(--color-klein);
 }
 
 /* Inverted section: dark bg in light mode, light bg in dark mode */

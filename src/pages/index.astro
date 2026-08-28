@@ -79,7 +79,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
   {/* ===== Hero ===== */}
   <section class="section-kamen relative overflow-hidden">
     <div class="container max-w-5xl mx-auto px-6 py-20 md:py-28" data-animate="fade">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terakota">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-klein">
         Blizanci <span aria-hidden="true">·</span> Čitluk <span aria-hidden="true">·</span> Brotnjo
       </p>
 
@@ -100,7 +100,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       <div class="mt-10 flex flex-col sm:flex-row gap-4">
         <a
           href="#kraj"
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-klein text-klein-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           O kraju
         </a>
@@ -155,7 +155,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-animate="fade">
         {
           kraj.map((blok) => (
-            <article class="border-l-2 border-terakota pl-6">
+            <article class="border-l-2 border-klein pl-6">
               <h3 class="font-serif-display text-2xl">{blok.naslov}</h3>
               <p class="mt-3 leading-relaxed">{blok.tekst}</p>
             </article>
@@ -175,7 +175,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
         obiteljskiZapisi.length > 0 && (
           <dl class="mt-8 space-y-6">
             {obiteljskiZapisi.map((zapis) => (
-              <div class="border-l-2 border-terakota pl-6">
+              <div class="border-l-2 border-klein pl-6">
                 <dt class="font-serif-display text-xl">{zapis.naslov}</dt>
                 <dd class="mt-2 leading-relaxed text-muted-foreground">{zapis.tekst}</dd>
               </div>
@@ -193,7 +193,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
           Imate podatak, fotografiju ili priču?{' '}
           <a
             href="/contact"
-            class="font-medium text-foreground underline decoration-terakota decoration-2 underline-offset-4 hover:text-terakota transition-colors"
+            class="font-medium text-foreground underline decoration-klein decoration-2 underline-offset-4 hover:text-klein transition-colors"
           >
             Javite se
           </a>{' '}
@@ -215,7 +215,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
         <div class="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
           <a
             href="/contact"
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-klein text-klein-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Javite se
           </a>
