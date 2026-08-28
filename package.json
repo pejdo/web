@@ -3,6 +3,9 @@
   "type": "module",
   "version": "3.4.0",
   "author": "Nikola Pejdo <nikola@pejdo.com>",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
