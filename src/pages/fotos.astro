@@ -4,11 +4,19 @@ import Slideshow from '@/components/sections/Slideshow.astro';
 import type { SlideshowPhoto } from '@/components/sections/Slideshow.astro';
 import { fetchGooglePhotosAlbum, googlePhotoUrl } from '@/lib/googlePhotos';
 
-// Public Google Photos album, read at build time. Set
-// PUBLIC_GOOGLE_PHOTOS_ALBUM_URL in .env - see .env.example for setup.
-// Without it (or if the album cannot be read) the page falls back to the
-// locally defined photos below, so it is never empty.
-const albumUrl = import.meta.env.PUBLIC_GOOGLE_PHOTOS_ALBUM_URL;
+// Public Google Photos album, read at build time.
+//
+// The link is a public "anyone with the link" share URL - nothing secret - so it
+// lives here as the default. That keeps the build working on any host without
+// configuring environment variables. Cloudflare Pages in particular only exposes
+// build-time variables under Settings > Build, not the Runtime section, which
+// does not apply to static sites.
+//
+// To point at a different album without editing this file, set
+// PUBLIC_GOOGLE_PHOTOS_ALBUM_URL as a build variable; it takes precedence.
+const DEFAULT_ALBUM_URL = 'https://photos.app.goo.gl/JwvhR2Sdgxw4Ag8h8';
+
+const albumUrl = import.meta.env.PUBLIC_GOOGLE_PHOTOS_ALBUM_URL || DEFAULT_ALBUM_URL;
 
 const googlePhotos = albumUrl ? await fetchGooglePhotosAlbum(albumUrl, { maxPhotos: 60 }) : [];
 
@@ -32,6 +40,27 @@ const descriptions = new Map<string, { alt: string; caption?: string; skip?: boo
     {
       alt: 'Lege Cor logo — crveno srce s tehnickim linijama na tamnoj pozadini',
       caption: 'Lege Cor',
+    },
+  ],
+  [
+    'AP1GczM5Jz7KwMD-Sv4vRqEGxMvfqJqQdhVPHnbLaXFFF1potO4tH_jPDKcqn27ndt1jT1fdZujpz6qQc30DMIIIOUQ7n-UciuFuhm82TCy4HCga3mFvo5w',
+    {
+      alt: 'Cekaonica ordinacije - bijeli interijer s apstraktnom slikom i foteljom',
+      caption: 'Ordinacija — cekaonica',
+    },
+  ],
+  [
+    'AP1GczPM86Dpwg_-b61PqvwT11rjaxyiZlkqe3zGjflBUD5yeNQTjlNr8c5CWjyFvbSr8e4hc47nC8ox3ka3-8fFRQW5bszgelUXwyXW3ibuHKm6kGsUoBY',
+    {
+      alt: 'Zgrada dentalne poliklinike DOR sa zracne perspektive, okruzena dalmatinskim krajolikom',
+      caption: 'Poliklinika DOR',
+    },
+  ],
+  [
+    'AP1GczOykW59cYaJgUes73HziKuw52MgM55bfb5q78PpW1mYNN-Z0XECZy-Bctu0I8mRd5wTT-tI0KBmmqDeiEQMhEDzY9MrGwqAHLxlSg8WnxtJt2CYd2k',
+    {
+      alt: 'Crtez svinje tusem i akvarelom na svijetlom papiru',
+      caption: 'Crtez tusem',
     },
   ],
   [
