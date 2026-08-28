@@ -2,26 +2,98 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Contact from '@/components/sections/Contact.astro';
 
-// Delivery endpoint for the contact form. Messages arrive at the address
-// registered with the form provider (nikola@pejdo.com). Set
-// PUBLIC_CONTACT_FORM_ENDPOINT in .env - see .env.example for setup.
-// Until it is set, the form falls back to a mailto: submission so the page
-// never silently swallows a message.
-const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT;
+/**
+ * The form POSTs to /api/contact, a Cloudflare Pages Function that sends the
+ * message by email (see functions/api/contact.ts). The function redirects back
+ * here with ?poruka=ok|invalid|error.
+ *
+ * This page is statically built, so the query parameter cannot be read at build
+ * time. All three result banners are therefore rendered up front and hidden;
+ * a small script reveals the one matching the parameter. Without JavaScript no
+ * banner appears, but the message is still delivered by the function.
+ *
+ * PUBLIC_CONTACT_FORM_ENDPOINT can override the target if the form is ever
+ * pointed at an external provider instead.
+ */
+const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT || '/api/contact';
 const contactEmail = 'nikola@pejdo.com';
-const siteUrl = Astro.site ?? new URL('http://localhost:4321');
+
+const banners = [
+  {
+    key: 'ok',
+    tone: 'success',
+    title: 'Poruka je poslana.',
+    body: 'Hvala na poruci — javit ću se u najkraćem roku.',
+  },
+  {
+    key: 'invalid',
+    tone: 'error',
+    title: 'Poruka nije poslana.',
+    body: 'Provjerite ime, ispravnost e-mail adrese i tekst poruke, pa pokušajte ponovno.',
+  },
+  {
+    key: 'error',
+    tone: 'error',
+    title: 'Poruka nije poslana.',
+    body: `Došlo je do tehničke pogreške. Pokušajte ponovno ili pišite izravno na ${contactEmail}.`,
+  },
+] as const;
 ---
 
 <BaseLayout
   title="Kontakt"
   description="Javite se s pitanjem, upitom za projekt ili povratnom informacijom. Odgovaram u najkraćem roku."
 >
+  <div class="container max-w-5xl mx-auto px-6" data-contact-banners>
+    {
+      banners.map((banner) => (
+        <div
+          data-poruka={banner.key}
+          hidden
+          role={banner.tone === 'error' ? 'alert' : 'status'}
+          class:list={[
+            'mt-8 rounded-lg border p-4',
+            banner.tone === 'success'
+              ? 'border-klein/40 bg-klein/5'
+              : 'border-destructive/40 bg-destructive/5',
+          ]}
+        >
+          <p class="font-medium text-foreground">{banner.title}</p>
+          <p class="mt-1 text-sm text-muted-foreground leading-relaxed">{banner.body}</p>
+        </div>
+      ))
+    }
+  </div>
+
   <Contact
     title="Javite se"
     subtitle="Pitanja, upiti za projekt ili povratne informacije — pošaljite poruku i javit ću se u najkraćem roku."
     email={contactEmail}
-    formAction={formEndpoint ?? `mailto:${contactEmail}`}
+    formAction={formEndpoint}
     formSubject="Nova poruka s web stranice"
-    successUrl={formEndpoint ? new URL('/contact', siteUrl).toString() : undefined}
   />
 </BaseLayout>
+
+<script>
+  /**
+   * Reveals the banner matching ?poruka=... after the function redirects back,
+   * then strips the parameter so a reload does not show a stale result.
+   */
+  function showContactResult(): void {
+    const status = new URLSearchParams(window.location.search).get('poruka');
+    if (!status) return;
+
+    const banner = document.querySelector<HTMLElement>(`[data-poruka="${CSS.escape(status)}"]`);
+    if (!banner) return;
+
+    banner.removeAttribute('hidden');
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('poruka');
+    window.history.replaceState({}, '', url);
+  }
+
+  showContactResult();
+  document.addEventListener('astro:after-swap', showContactResult);
+</script>
