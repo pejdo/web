@@ -436,6 +436,53 @@
       ],
       "category": "media",
       "notes": "Autoplay pauses on hover and focus and resumes on leave; the pause button records an explicit intent that hover no longer overrides. First slide loads eager, the rest lazy. Slide changes are announced through an aria-live region. Used by src/pages/fotos.astro, which sources images from a public Google Photos album via src/lib/googlePhotos.ts and uses fit='contain' with stage='canvas'."
+    },
+    {
+      "name": "VideoEmbed",
+      "file": "src/components/sections/VideoEmbed.astro",
+      "description": "Vimeo videos rendered as click-to-play facades: a poster image with a play button that swaps in the real iframe only on activation. No request, cookie, or script reaches Vimeo until the visitor opts in. Without JavaScript the facade degrades to a link to the video on vimeo.com.",
+      "variants": 1,
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Section heading rendered as h2 in the serif font"
+        },
+        "subtitle": {
+          "type": "string",
+          "required": false,
+          "description": "Supporting text below the heading"
+        },
+        "videos": {
+          "type": "VimeoVideo[]",
+          "required": true,
+          "description": "Videos in display order, as returned by fetchVimeoVideo/fetchVimeoVideos from src/lib/vimeo.ts. The section renders nothing when the array is empty."
+        },
+        "single": {
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "One video per row instead of a two-column grid"
+        },
+        "spacing": {
+          "type": "'default' | 'tight'",
+          "required": false,
+          "default": "default",
+          "description": "Vertical rhythm. 'tight' drops the top padding so the section sits directly below a page heading."
+        }
+      },
+      "features": [
+        "responsive",
+        "dark-mode",
+        "accessible",
+        "semantic-html",
+        "no-js-fallback",
+        "lazy-loading",
+        "privacy-friendly",
+        "view-transitions-safe"
+      ],
+      "category": "media",
+      "notes": "The iframe is built locally from a validated numeric video id rather than injecting the HTML snippet oEmbed returns, so Vimeo never controls attributes on the page. Player URL carries dnt=1. Metadata comes from Vimeo's keyless public oEmbed endpoint at build time; unreadable videos are skipped with a warning. Used by src/pages/video.astro."
     }
   ],
   "ui": [
