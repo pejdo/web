@@ -458,6 +458,17 @@
           "required": true,
           "description": "Videos in display order, as returned by fetchVimeoVideo/fetchVimeoVideos from src/lib/vimeo.ts. The section renders nothing when the array is empty."
         },
+        "titles": {
+          "type": "Record<string, string>",
+          "required": false,
+          "description": "Display titles keyed by Vimeo video id, overriding the title stored on Vimeo. Applies to the caption, poster alt text, iframe title and no-JS link. Useful when an upload keeps a working filename."
+        },
+        "hideAuthor": {
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Hide the uploader name shown below each video"
+        },
         "single": {
           "type": "boolean",
           "required": false,

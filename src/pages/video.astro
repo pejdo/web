@@ -7,29 +7,25 @@ import { fetchVimeoVideos } from '@/lib/vimeo';
  * Vimeo videos shown on this page, in display order.
  *
  * Metadata (title, poster, duration) is read from Vimeo's public oEmbed
- * endpoint at build time - no API key needed, but the video must be public or
- * unlisted-with-hash. Unreadable videos are skipped with a build warning rather
- * than breaking the build.
+ * endpoint at build time - no API key needed, but each video must be public, or
+ * unlisted with its hash in the link. Unreadable videos are skipped with a
+ * build warning rather than breaking the build.
  *
- * Replace these with your own links. Accepted shapes:
+ * Accepted shapes:
  *   https://vimeo.com/123456789
  *   https://vimeo.com/123456789/abcdef1234   (unlisted, hash in the path)
  *   https://vimeo.com/123456789?h=abcdef1234 (unlisted, hash as a parameter)
  *
- * A single link can also be supplied through PUBLIC_VIMEO_VIDEO_URL in .env,
- * which takes precedence when set.
+ * Share links may carry tracking parameters (?share=copy&fl=sv&fe=ci); they are
+ * ignored, only the video id and any unlisted hash are used.
+ *
+ * PUBLIC_VIMEO_VIDEO_URL in .env overrides this list when set.
  */
 const configuredUrl = import.meta.env.PUBLIC_VIMEO_VIDEO_URL;
 
-const videoUrls = configuredUrl
-  ? [configuredUrl]
-  : [
-      // Placeholder - Blender's Big Buck Bunny, Creative Commons licensed.
-      'https://vimeo.com/1084537',
-    ];
+const videoUrls = configuredUrl ? [configuredUrl] : ['https://vimeo.com/1222209152'];
 
 const videos = await fetchVimeoVideos(videoUrls, { width: 1280 });
-const usingPlaceholder = !configuredUrl;
 ---
 
 <BaseLayout
@@ -44,7 +40,12 @@ const usingPlaceholder = !configuredUrl;
 
   {
     videos.length > 0 ? (
-      <VideoEmbed videos={videos} single={videos.length === 1} spacing="tight" />
+      <VideoEmbed
+        videos={videos}
+        titles={{ '1222209152': 'Dentalna ordinacija — predstavljanje' }}
+        single={videos.length === 1}
+        spacing="tight"
+      />
     ) : (
       <section class="pb-20 px-6">
         <div class="container max-w-2xl mx-auto rounded-xl border bg-card p-8 text-center">
@@ -54,21 +55,6 @@ const usingPlaceholder = !configuredUrl;
             <code class="font-mono">.env</code>, ili upišite Vimeo poveznice u
             <code class="font-mono">src/pages/video.astro</code>. Video mora biti javan ili nejavan
             s hashem u poveznici.
-          </p>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    usingPlaceholder && videos.length > 0 && (
-      <section class="pb-20 px-6">
-        <div class="container max-w-2xl mx-auto rounded-lg border border-dashed bg-card p-5 text-center">
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Prikazan je primjer videa. Zamijenite ga svojim: postavite
-            <code class="font-mono">PUBLIC_VIMEO_VIDEO_URL</code> u
-            <code class="font-mono">.env</code> ili uredite popis u
-            <code class="font-mono">src/pages/video.astro</code>.
           </p>
         </div>
       </section>

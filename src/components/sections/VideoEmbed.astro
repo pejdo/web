@@ -34,6 +34,14 @@ interface Props {
   subtitle?: string;
   /** Videos to show, in display order */
   videos: VimeoVideo[];
+  /**
+   * Display titles keyed by Vimeo video id, overriding the title stored on
+   * Vimeo. Useful when the uploaded file keeps a working name ("dental final")
+   * that should not be what visitors read.
+   */
+  titles?: Record<string, string>;
+  /** Hide the uploader name below each video */
+  hideAuthor?: boolean;
   /** One video per row, rather than a two-column grid */
   single?: boolean;
   /**
@@ -44,7 +52,20 @@ interface Props {
   spacing?: 'default' | 'tight';
 }
 
-const { title, subtitle, videos, single = false, spacing = 'default' } = Astro.props;
+const {
+  title,
+  subtitle,
+  videos,
+  titles = {},
+  hideAuthor = false,
+  single = false,
+  spacing = 'default',
+} = Astro.props;
+
+/** The title to show for a video: the override when given, else Vimeo's own. */
+function displayTitle(video: VimeoVideo): string {
+  return titles[video.id] ?? video.title;
+}
 
 const sectionSpacingClass = spacing === 'tight' ? 'pb-16 md:pb-24 px-6' : 'py-16 md:py-24 px-6';
 const gridClass = single ? 'grid gap-10' : 'grid gap-10 md:grid-cols-2';
@@ -77,12 +98,12 @@ const gridClass = single ? 'grid gap-10' : 'grid gap-10 md:grid-cols-2';
                   class="video-facade relative overflow-hidden rounded-xl border bg-muted aspect-video"
                   data-video-facade
                   data-player-url={vimeoPlayerUrl(video, true)}
-                  data-video-title={video.title}
+                  data-video-title={displayTitle(video)}
                 >
                   {video.thumbnailUrl ? (
                     <img
                       src={video.thumbnailUrl}
-                      alt={`Naslovna slika videa: ${video.title}`}
+                      alt={`Naslovna slika videa: ${displayTitle(video)}`}
                       width={video.thumbnailWidth ?? undefined}
                       height={video.thumbnailHeight ?? undefined}
                       loading={index === 0 ? 'eager' : 'lazy'}
@@ -116,7 +137,7 @@ const gridClass = single ? 'grid gap-10' : 'grid gap-10 md:grid-cols-2';
                       </svg>
                     </span>
                     <span class="sr-only" data-video-link-label>
-                      Otvori „{video.title}” na Vimeu
+                      Otvori „{displayTitle(video)}” na Vimeu
                     </span>
                   </a>
 
@@ -128,8 +149,8 @@ const gridClass = single ? 'grid gap-10' : 'grid gap-10 md:grid-cols-2';
                 </div>
 
                 <figcaption class="mt-3">
-                  <p class="font-medium text-foreground">{video.title}</p>
-                  {video.authorName && (
+                  <p class="font-medium text-foreground">{displayTitle(video)}</p>
+                  {!hideAuthor && video.authorName && (
                     <p class="mt-0.5 text-sm text-muted-foreground">{video.authorName}</p>
                   )}
                 </figcaption>
