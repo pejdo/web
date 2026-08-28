@@ -3,21 +3,35 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Contact from '@/components/sections/Contact.astro';
 
 /**
- * The form POSTs to /api/contact, a Cloudflare Pages Function that sends the
- * message by email (see functions/api/contact.ts). The function redirects back
- * here with ?poruka=ok|invalid|error.
+ * Contact form delivery.
  *
- * This page is statically built, so the query parameter cannot be read at build
- * time. All three result banners are therefore rendered up front and hidden;
- * a small script reveals the one matching the parameter. Without JavaScript no
- * banner appears, but the message is still delivered by the function.
+ * The form POSTs to whatever PUBLIC_CONTACT_FORM_ENDPOINT is set to. When that
+ * is empty the form falls back to a mailto: action, which opens the visitor's
+ * mail client - not ideal, but it never loses a message and never 404s.
  *
- * PUBLIC_CONTACT_FORM_ENDPOINT can override the target if the form is ever
- * pointed at an external provider instead.
+ * A Cloudflare Pages Function is committed at functions/api/contact.ts to send
+ * mail server-side through Resend. It is NOT active yet: this project is
+ * deployed as a Worker with static assets, which ignores the functions/
+ * directory, so /api/contact returns 404. Once the handler is reachable (by
+ * converting the project to Cloudflare Pages, or adding a wrangler config with
+ * a Worker entry point) set this build variable:
+ *
+ *   PUBLIC_CONTACT_FORM_ENDPOINT=/api/contact
+ *
+ * and the form will post to it, with the result banners below in play.
  */
-const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT || '/api/contact';
+const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT;
 const contactEmail = 'nikola@pejdo.com';
 
+/** A mailto: submission cannot report a result, so banners need a real endpoint. */
+const usesEndpoint = Boolean(formEndpoint);
+
+/**
+ * Result banners. The page is statically built and cannot read the ?poruka=
+ * flag at build time, so all three are rendered hidden and a small script
+ * reveals whichever one matches. Without JavaScript no banner appears, but the
+ * message is still delivered.
+ */
 const banners = [
   {
     key: 'ok',
@@ -44,40 +58,42 @@ const banners = [
   title="Kontakt"
   description="Javite se s pitanjem, upitom za projekt ili povratnom informacijom. Odgovaram u najkraćem roku."
 >
-  <div class="container max-w-5xl mx-auto px-6" data-contact-banners>
-    {
-      banners.map((banner) => (
-        <div
-          data-poruka={banner.key}
-          hidden
-          role={banner.tone === 'error' ? 'alert' : 'status'}
-          class:list={[
-            'mt-8 rounded-lg border p-4',
-            banner.tone === 'success'
-              ? 'border-klein/40 bg-klein/5'
-              : 'border-destructive/40 bg-destructive/5',
-          ]}
-        >
-          <p class="font-medium text-foreground">{banner.title}</p>
-          <p class="mt-1 text-sm text-muted-foreground leading-relaxed">{banner.body}</p>
-        </div>
-      ))
-    }
-  </div>
+  {
+    usesEndpoint && (
+      <div class="container max-w-5xl mx-auto px-6">
+        {banners.map((banner) => (
+          <div
+            data-poruka={banner.key}
+            hidden
+            role={banner.tone === 'error' ? 'alert' : 'status'}
+            class:list={[
+              'mt-8 rounded-lg border p-4',
+              banner.tone === 'success'
+                ? 'border-klein/40 bg-klein/5'
+                : 'border-destructive/40 bg-destructive/5',
+            ]}
+          >
+            <p class="font-medium text-foreground">{banner.title}</p>
+            <p class="mt-1 text-sm text-muted-foreground leading-relaxed">{banner.body}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   <Contact
     title="Javite se"
     subtitle="Pitanja, upiti za projekt ili povratne informacije — pošaljite poruku i javit ću se u najkraćem roku."
     email={contactEmail}
-    formAction={formEndpoint}
+    formAction={formEndpoint ?? `mailto:${contactEmail}`}
     formSubject="Nova poruka s web stranice"
   />
 </BaseLayout>
 
 <script>
   /**
-   * Reveals the banner matching ?poruka=... after the function redirects back,
-   * then strips the parameter so a reload does not show a stale result.
+   * Reveals the banner matching ?poruka=... after the form handler redirects
+   * back, then strips the parameter so a reload shows nothing stale.
    */
   function showContactResult(): void {
     const status = new URLSearchParams(window.location.search).get('poruka');
