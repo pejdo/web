@@ -239,16 +239,10 @@ mark {
   opacity: 0.85;
 }
 
-/* Woven border, echoing traditional embroidery trim (pleter) */
+/* Solid accent rule under section headings */
 .pleter-rule {
   height: 2px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--color-klein) 0 0.5rem,
-    transparent 0.5rem 0.75rem,
-    var(--color-zlato) 0.75rem 1.25rem,
-    transparent 1.25rem 1.5rem
-  );
+  background-color: var(--color-klein);
 }
 
 /* Drop cap for opening paragraphs, as in older printed Croatian editions */
