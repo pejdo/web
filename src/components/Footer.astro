@@ -21,7 +21,7 @@ interface Props {
 const { variant = 'boxed' } = Astro.props;
 
 const footerLinks = {
-  astrodeck: [
+  stranice: [
     { href: '/', label: 'Početna' },
     { href: '/pjesme', label: 'Pjesme' },
     { href: '/latinski', label: 'Latinski' },
@@ -30,9 +30,7 @@ const footerLinks = {
   ],
   pages: [
     { href: '/blog', label: 'Blog' },
-    { href: '/content', label: 'Sadržaj' },
     { href: '/contact', label: 'Kontakt' },
-    { href: '/login', label: 'Prijava' },
   ],
 };
 
@@ -52,12 +50,12 @@ const containerClass =
         </p>
       </div>
 
-      <!-- AstroDeck -->
+      <!-- Stranice -->
       <div>
         <h3 class="font-semibold mb-4">Stranice</h3>
         <ul class="space-y-0">
           {
-            footerLinks.astrodeck.map((link) => (
+            footerLinks.stranice.map((link) => (
               <li>
                 <a
                   href={link.href}

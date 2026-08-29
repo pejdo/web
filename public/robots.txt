@@ -1,8 +1,8 @@
-# robots.txt for AstroDeck
-# https://astrodeck.dev
+# robots.txt for PEJDO.COM
+# https://pejdo.com
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://astrodeck.dev/sitemap-index.xml
+Sitemap: https://pejdo.com/sitemap-index.xml
