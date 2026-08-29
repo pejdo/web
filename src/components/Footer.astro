@@ -20,29 +20,20 @@ interface Props {
 
 const { variant = 'boxed' } = Astro.props;
 
-const footerLinks = {
-  stranice: [
-    { href: '/', label: 'Početna' },
-    { href: '/pjesme', label: 'Pjesme' },
-    { href: '/latinski', label: 'Latinski' },
-    { href: '/fotos', label: 'Fotos' },
-    { href: '/video', label: 'Video' },
-  ],
-  pages: [
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Kontakt' },
-  ],
-};
-
+/**
+ * The footer no longer carries navigation: every page is reachable from the
+ * header, so duplicating the list here only added height. What remains is the
+ * brand blurb and the author credit.
+ */
 const containerClass =
   variant === 'fullWidth' ? 'w-full px-4' : 'container max-w-5xl mx-auto px-4 sm:px-6';
 ---
 
 <footer class="border-t bg-background">
   <div class:list={[containerClass, 'py-8 md:py-12']}>
-    <div class="grid grid-cols-3 gap-x-4 gap-y-6 md:gap-8 md:grid-cols-4">
+    <div class="grid gap-6 md:grid-cols-2 md:gap-8">
       <!-- Brand -->
-      <div class="col-span-3 md:col-span-1">
+      <div>
         <Logo />
         <p class="mt-3 md:mt-4 text-sm text-muted-foreground">
           Zapisi o rodu Pejdo iz Blizanaca na hercegovačkom Brotnju — o kraju, vjeri, duhanu i lozi,
@@ -50,46 +41,8 @@ const containerClass =
         </p>
       </div>
 
-      <!-- Stranice -->
-      <div>
-        <h3 class="font-semibold mb-2 md:mb-4">Stranice</h3>
-        <ul class="space-y-0">
-          {
-            footerLinks.stranice.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class="inline-block py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <!-- Pages -->
-      <div>
-        <h3 class="font-semibold mb-2 md:mb-4">Sadržaj</h3>
-        <ul class="space-y-0">
-          {
-            footerLinks.pages.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class="inline-block py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
       <!-- Creator -->
-      <div>
+      <div class="md:text-right">
         <h3 class="font-semibold mb-2 md:mb-4">Autor</h3>
         <p class="text-sm text-muted-foreground">Nikola Pejdo</p>
         <p class="text-sm text-muted-foreground mt-1">
