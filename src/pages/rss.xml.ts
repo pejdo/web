@@ -7,8 +7,8 @@ export async function GET(context: import('astro').APIContext) {
 
   return rss({
     title: 'PEJDO.COM Blog',
-    description: 'Articles, tutorials, and updates from Nikola Pejdo',
-    site: context.site ?? 'https://astrodeck.dev',
+    description: 'Zapisi o rodu Pejdo, hercegovačkom Brotnju, vjeri, duhanu i lozi.',
+    site: context.site ?? 'https://pejdo.com',
     items: sortedPosts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
@@ -16,7 +16,7 @@ export async function GET(context: import('astro').APIContext) {
       author: post.data.author ?? 'Nikola Pejdo',
       link: `/blog/${post.id}/`,
     })),
-    customData: `<language>en-us</language>
+    customData: `<language>hr</language>
 <managingEditor>nikola@pejdo.com (Nikola Pejdo)</managingEditor>
 <webMaster>nikola@pejdo.com (Nikola Pejdo)</webMaster>`,
   });
