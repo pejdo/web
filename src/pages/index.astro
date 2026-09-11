@@ -78,10 +78,8 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
 >
   {/* ===== Hero ===== */}
   <section class="section-kamen relative overflow-hidden">
-    <div class="sahovnica-band" aria-hidden="true"></div>
-
     <div class="container max-w-5xl mx-auto px-6 py-20 md:py-28" data-animate="fade">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terakota">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-klein">
         Blizanci <span aria-hidden="true">·</span> Čitluk <span aria-hidden="true">·</span> Brotnjo
       </p>
 
@@ -102,7 +100,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       <div class="mt-10 flex flex-col sm:flex-row gap-4">
         <a
           href="#kraj"
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-klein text-klein-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           O kraju
         </a>
@@ -114,30 +112,28 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
         </a>
       </div>
     </div>
-
-    <div class="sahovnica-band" aria-hidden="true"></div>
   </section>
 
   {/* ===== Uvod ===== */}
   <section class="py-16 md:py-24">
     <div class="container max-w-3xl mx-auto px-6" data-animate="fade">
-      <h2 class="font-serif-display text-3xl md:text-4xl">Ime i podrijetlo</h2>
+      <h2 class="font-serif-display text-3xl md:text-4xl text-klein">Ime i podrijetlo</h2>
       <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
 
-      <p class="pocetno-slovo mt-8 text-lg leading-relaxed text-foreground">
+      <p class="pocetno-slovo mt-8 text-lg leading-relaxed text-klein">
         Pejdo je obiteljsko ime koje nose Hrvati iz Blizanaca, sela u općini Čitluk na Brotnju —
         kamenoj visoravni između Neretve i Mostarskog blata. Kao i mnoga hercegovačka obiteljska
         imena, prenosilo se usmeno kroz naraštaje prije nego što je zapisano u matične knjige koje
         su vodile župe.
       </p>
 
-      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+      <p class="mt-6 text-lg leading-relaxed text-klein">
         Povijest jedne obitelji ne stoji u knjigama nego u ljudima — u tome gdje je čija kuća, koja
         je loza čija, kome se ide na slavu i koga se spominje na Svi svete. Dio toga zapisan je u
         župnim knjigama, dio postoji samo dok ga se prenosi dalje.
       </p>
 
-      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+      <p class="mt-6 text-lg leading-relaxed text-klein">
         Ova stranica postoji da se taj drugi dio ne izgubi. Ako imate podatke, fotografije ili priče
         iz obitelji, dobro su došli — svaki zapis nadopunjuje sliku.
       </p>
@@ -159,7 +155,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-animate="fade">
         {
           kraj.map((blok) => (
-            <article class="border-l-2 border-terakota pl-6">
+            <article class="border-l-2 border-klein pl-6">
               <h3 class="font-serif-display text-2xl">{blok.naslov}</h3>
               <p class="mt-3 leading-relaxed">{blok.tekst}</p>
             </article>
@@ -169,21 +165,19 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
     </div>
   </section>
 
-  <div class="sahovnica-band" aria-hidden="true"></div>
-
   {/* ===== Obiteljski zapisi ===== */}
   <section class="py-16 md:py-24">
     <div class="container max-w-3xl mx-auto px-6" data-animate="fade">
-      <h2 class="font-serif-display text-3xl md:text-4xl">Obiteljski zapisi</h2>
+      <h2 class="font-serif-display text-3xl md:text-4xl text-klein">Obiteljski zapisi</h2>
       <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
 
       {
         obiteljskiZapisi.length > 0 && (
           <dl class="mt-8 space-y-6">
             {obiteljskiZapisi.map((zapis) => (
-              <div class="border-l-2 border-terakota pl-6">
-                <dt class="font-serif-display text-xl">{zapis.naslov}</dt>
-                <dd class="mt-2 leading-relaxed text-muted-foreground">{zapis.tekst}</dd>
+              <div class="border-l-2 border-klein pl-6">
+                <dt class="font-serif-display text-xl text-klein">{zapis.naslov}</dt>
+                <dd class="mt-2 leading-relaxed text-klein">{zapis.tekst}</dd>
               </div>
             ))}
           </dl>
@@ -191,15 +185,15 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
       }
 
       <div class="mt-8 rounded-lg border border-dashed bg-muted/40 p-6 md:p-8">
-        <p class="leading-relaxed text-muted-foreground">
+        <p class="leading-relaxed text-klein">
           Zapisi o najstarijim poznatim precima i granama obitelji upisuju se kako se prikupe iz
           župnih knjiga i obiteljskog pamćenja.
         </p>
-        <p class="mt-4 leading-relaxed text-muted-foreground">
+        <p class="mt-4 leading-relaxed text-klein">
           Imate podatak, fotografiju ili priču?{' '}
           <a
             href="/contact"
-            class="font-medium text-foreground underline decoration-terakota decoration-2 underline-offset-4 hover:text-terakota transition-colors"
+            class="font-medium text-klein underline decoration-klein decoration-2 underline-offset-4 hover:text-klein/80 transition-colors"
           >
             Javite se
           </a>{' '}
@@ -211,7 +205,6 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
 
   {/* ===== Zavrsni poziv ===== */}
   <section class="section-inverted">
-    <div class="sahovnica-band" aria-hidden="true"></div>
     <div class="py-20 md:py-28 px-6">
       <div class="container max-w-3xl mx-auto text-center" data-animate="scale">
         <h2 class="font-serif-display text-3xl md:text-5xl">Nosite li i vi ime Pejdo?</h2>
@@ -222,7 +215,7 @@ const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
         <div class="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
           <a
             href="/contact"
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-klein text-klein-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Javite se
           </a>
