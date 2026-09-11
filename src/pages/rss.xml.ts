@@ -8,7 +8,7 @@ export async function GET(context: import('astro').APIContext) {
   return rss({
     title: 'PEJDO.COM Blog',
     description: 'Articles, tutorials, and updates from Nikola Pejdo',
-    site: context.site ?? 'https://astrodeck.dev',
+    site: context.site ?? 'https://pejdo.com',
     items: sortedPosts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,

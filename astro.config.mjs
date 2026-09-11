@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://astrodeck.dev',
+  site: 'https://pejdo.com',
   integrations: [
     react(),
     sitemap({
