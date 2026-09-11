@@ -28,7 +28,7 @@ const { Content } = await render(post);
 
 // Format date helper
 function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString('hr-HR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -57,15 +57,15 @@ function formatDate(date: Date) {
         >
           <path d="m15 18-6-6 6-6"></path>
         </svg>
-        Back to Blog
+        Natrag na zapise
       </a>
     </div>
 
     <header class="mb-12">
       <div class="container max-w-3xl mx-auto mb-8 space-y-4">
-        <h1 class="text-5xl font-bold tracking-tight">{post.data.title}</h1>
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">{post.data.title}</h1>
 
-        <p class="text-xl text-muted-foreground">{post.data.description}</p>
+        <p class="text-lg text-muted-foreground">{post.data.description}</p>
 
         <div class="flex items-center gap-4 text-sm text-muted-foreground pt-2">
           <time datetime={post.data.pubDate.toISOString()}>
@@ -133,7 +133,7 @@ function formatDate(date: Date) {
           {
             prevPost ? (
               <a href={`/blog/${prevPost.id}`} class="group flex-1 text-left">
-                <div class="text-xs text-muted-foreground mb-1">Previous</div>
+                <div class="text-xs text-muted-foreground mb-1">Stariji zapis</div>
                 <div class="text-sm font-medium group-hover:text-primary transition-colors">
                   {prevPost.data.title}
                 </div>
@@ -169,13 +169,13 @@ function formatDate(date: Date) {
               <rect width="3" height="3" x="10" y="17" rx="1"></rect>
               <rect width="3" height="3" x="17" y="17" rx="1"></rect>
             </svg>
-            All posts
+            Svi zapisi
           </a>
 
           {
             nextPost ? (
               <a href={`/blog/${nextPost.id}`} class="group flex-1 text-right">
-                <div class="text-xs text-muted-foreground mb-1">Next</div>
+                <div class="text-xs text-muted-foreground mb-1">Noviji zapis</div>
                 <div class="text-sm font-medium group-hover:text-primary transition-colors">
                   {nextPost.data.title}
                 </div>

@@ -8,7 +8,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 // Format date helper
 function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString('hr-HR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -16,11 +16,13 @@ function formatDate(date: Date) {
 }
 ---
 
-<BaseLayout title="Blog Archive" description="Complete archive of all blog posts">
+<BaseLayout title="Arhiva" description="Svi zapisi, poredani od najnovijega prema najstarijemu.">
   <div class="container max-w-4xl mx-auto py-16">
     <div class="mb-16">
-      <h1 class="text-6xl font-bold tracking-tight mb-6">Archive</h1>
-      <p class="text-xl text-muted-foreground">Complete list of all blog posts.</p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Arhiva</h1>
+      <p class="text-lg text-muted-foreground">
+        Svi zapisi na jednome mjestu, od najnovijega prema najstarijemu.
+      </p>
     </div>
 
     <ul class="space-y-6">

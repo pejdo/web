@@ -26,29 +26,41 @@ const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 
 // Format date helper
 function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString('hr-HR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 }
+
+/**
+ * Croatian plural for "zapis" (entry).
+ *
+ * Croatian picks a form by the last digit, with the teens as an exception:
+ * 1 zapis, 2-4 zapisa, 5-20 zapisa, then the pattern repeats (21 zapis).
+ */
+function zapisCount(count: number): string {
+  const lastTwo = count % 100;
+  const last = count % 10;
+  if (last === 1 && lastTwo !== 11) return `${count} zapis`;
+  return `${count} zapisa`;
+}
 ---
 
-<BaseLayout title={`Posts tagged "${tag}"`} description={`All blog posts tagged with ${tag}`}>
+<BaseLayout title={`Zapisi s oznakom "${tag}"`} description={`Svi zapisi označeni temom ${tag}.`}>
   <div class="container max-w-4xl mx-auto py-16">
     <div class="mb-16">
       <a
         href="/tags"
         class="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
       >
-        ← All tags
+        ← Sve oznake
       </a>
-      <h1 class="text-6xl font-bold tracking-tight mb-6">
-        Posts tagged <span class="text-primary">#{tag}</span>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        Zapisi s oznakom <span class="text-primary">#{tag}</span>
       </h1>
-      <p class="text-xl text-muted-foreground">
-        {sortedPosts.length}
-        {sortedPosts.length === 1 ? 'post' : 'posts'}
+      <p class="text-lg text-muted-foreground">
+        {zapisCount(sortedPosts.length)}
       </p>
     </div>
 
@@ -57,7 +69,7 @@ function formatDate(date: Date) {
         sortedPosts.map((post) => (
           <article class="group">
             <a href={`/blog/${post.id}`} class="block space-y-4">
-              <h2 class="text-3xl font-bold tracking-tight group-hover:text-primary transition-colors">
+              <h2 class="text-xl md:text-2xl font-semibold tracking-tight group-hover:text-primary transition-colors">
                 {post.data.title}
               </h2>
 
