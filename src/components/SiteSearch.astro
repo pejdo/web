@@ -21,14 +21,16 @@
 ---
 
 <div class="relative" data-site-search>
-  <!-- Trigger. Below lg there is no room beside the logo and seven nav items, so
-       it stays an icon-only button; from lg up it is drawn as a search bar with a
-       bordered field, placeholder text and the / hint. It is still a button, not
-       an input: the real input lives in the panel below, and two inputs would
-       duplicate the id. -->
+  <!-- Trigger. Always drawn as a search bar: a bordered field with placeholder
+       text, plus a / keyboard hint from lg up where there is room for it. The
+       field flexes between a mobile minimum and 224px so it fits beside the logo
+       and the nav at every width.
+
+       It is a button rather than an input: the real input lives in the panel
+       below, and a second one would duplicate the element id. -->
   <button
     type="button"
-    class="inline-flex items-center gap-2 rounded-md p-2 min-h-11 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring md:min-h-9 lg:w-56 lg:justify-start lg:rounded-lg lg:border lg:bg-card lg:px-3 lg:py-2 lg:hover:bg-card lg:hover:text-foreground"
+    class="inline-flex w-28 min-h-11 items-center gap-2 rounded-lg border bg-card px-3 py-2 text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-44 md:min-h-9 lg:w-56"
     aria-label="Pretraži stranicu"
     aria-expanded="false"
     hidden
@@ -47,9 +49,9 @@
       <circle cx="11" cy="11" r="8"></circle>
       <path d="m21 21-4.3-4.3"></path>
     </svg>
-    <span class="hidden lg:inline text-sm">Traži…</span>
+    <span class="truncate text-sm">Traži…</span>
     <kbd
-      class="ml-auto hidden lg:inline-flex h-5 items-center rounded border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground"
+      class="ml-auto hidden h-5 items-center rounded border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground lg:inline-flex"
       aria-hidden="true">/</kbd
     >
   </button>
