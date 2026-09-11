@@ -1,0 +1,192 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Sententia {
+  /** The Latin sentence */
+  latin: string;
+  /** English translation */
+  translation: string;
+  /** Author or source, where reliably attributable */
+  source: string;
+}
+
+const sententiae: Sententia[] = [
+  {
+    latin: 'Carpe diem.',
+    translation: 'Seize the day.',
+    source: 'Horace, Odes 1.11',
+  },
+  {
+    latin: 'Cogito, ergo sum.',
+    translation: 'I think, therefore I am.',
+    source: 'Rene Descartes',
+  },
+  {
+    latin: 'Veni, vidi, vici.',
+    translation: 'I came, I saw, I conquered.',
+    source: 'Julius Caesar',
+  },
+  {
+    latin: 'Alea iacta est.',
+    translation: 'The die is cast.',
+    source: 'Attributed to Caesar by Suetonius',
+  },
+  {
+    latin: 'Errare humanum est.',
+    translation: 'To err is human.',
+    source: 'Proverbial, after Seneca',
+  },
+  {
+    latin: 'Festina lente.',
+    translation: 'Make haste slowly.',
+    source: 'Motto of Augustus, via Suetonius',
+  },
+  {
+    latin: 'Memento mori.',
+    translation: 'Remember that you must die.',
+    source: 'Classical maxim',
+  },
+  {
+    latin: 'Dum spiro, spero.',
+    translation: 'While I breathe, I hope.',
+    source: 'Classical maxim',
+  },
+  {
+    latin: 'Scientia potentia est.',
+    translation: 'Knowledge is power.',
+    source: 'Associated with Francis Bacon',
+  },
+  {
+    latin: 'Audentes fortuna iuvat.',
+    translation: 'Fortune favours the bold.',
+    source: 'Virgil, Aeneid 10',
+  },
+  {
+    latin: 'Per aspera ad astra.',
+    translation: 'Through hardships to the stars.',
+    source: 'Proverbial',
+  },
+  {
+    latin: 'Vox populi, vox Dei.',
+    translation: 'The voice of the people is the voice of God.',
+    source: 'Medieval proverb',
+  },
+  {
+    latin: 'Tempus fugit.',
+    translation: 'Time flies.',
+    source: 'Virgil, Georgics 3',
+  },
+  {
+    latin: 'In vino veritas.',
+    translation: 'In wine there is truth.',
+    source: 'Proverbial',
+  },
+  {
+    latin: 'Ars longa, vita brevis.',
+    translation: 'Art is long, life is short.',
+    source: 'Hippocrates, via Seneca',
+  },
+  {
+    latin: 'Divide et impera.',
+    translation: 'Divide and rule.',
+    source: 'Political maxim',
+  },
+  {
+    latin: 'Homo homini lupus.',
+    translation: 'Man is a wolf to man.',
+    source: 'After Plautus, Asinaria',
+  },
+  {
+    latin: 'Nosce te ipsum.',
+    translation: 'Know thyself.',
+    source: 'Latin rendering of the Delphic maxim',
+  },
+  {
+    latin: 'Sapere aude.',
+    translation: 'Dare to be wise.',
+    source: 'Horace, Epistles 1.2',
+  },
+  {
+    latin: 'Amor vincit omnia.',
+    translation: 'Love conquers all.',
+    source: 'Virgil, Eclogues 10',
+  },
+  {
+    latin: 'Si vis pacem, para bellum.',
+    translation: 'If you want peace, prepare for war.',
+    source: 'After Vegetius',
+  },
+  {
+    latin: 'Acta non verba.',
+    translation: 'Deeds, not words.',
+    source: 'Proverbial',
+  },
+  {
+    latin: 'Verba volant, scripta manent.',
+    translation: 'Spoken words fly away, written words remain.',
+    source: 'Proverbial',
+  },
+  {
+    latin: 'Nemo iudex in causa sua.',
+    translation: 'No one should be a judge in his own cause.',
+    source: 'Legal maxim',
+  },
+  {
+    latin: 'Dura lex, sed lex.',
+    translation: 'The law is harsh, but it is the law.',
+    source: 'Legal maxim',
+  },
+  {
+    latin: 'Mens sana in corpore sano.',
+    translation: 'A sound mind in a sound body.',
+    source: 'Juvenal, Satires 10',
+  },
+  {
+    latin: 'Non scholae sed vitae discimus.',
+    translation: 'We learn not for school, but for life.',
+    source: 'After Seneca, Epistles 106',
+  },
+  {
+    latin: 'Fiat lux.',
+    translation: 'Let there be light.',
+    source: 'Vulgate, Genesis 1:3',
+  },
+];
+---
+
+<BaseLayout
+  title="Latinski"
+  description="Twenty-eight classic Latin sententiae with English translations and their sources."
+>
+  <div class="container max-w-3xl mx-auto py-16 px-6">
+    <header class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Latinski</h1>
+      <p class="text-lg text-muted-foreground">
+        Twenty-eight Latin sententiae — short sayings from poets, philosophers, and jurists — each
+        with its English translation and source.
+      </p>
+    </header>
+
+    <ol class="space-y-4" data-animate="fade">
+      {
+        sententiae.map((item, index) => (
+          <li class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow">
+            <div class="flex items-start gap-4">
+              <span
+                class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground"
+                aria-hidden="true"
+              >
+                {index + 1}
+              </span>
+              <div class="min-w-0">
+                <p class="text-lg md:text-xl font-semibold text-foreground italic">{item.latin}</p>
+                <p class="text-muted-foreground mt-2">{item.translation}</p>
+                <p class="text-sm text-muted-foreground/80 mt-3">{item.source}</p>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BaseLayout>

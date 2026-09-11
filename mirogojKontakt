@@ -1,0 +1,57 @@
+> The repo is ready for Pages. I can't create the project myself — no Cloudflare
+credentials here — so these are your dashboard steps.
+
+1. Create the Pages project
+
+Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → 
+select pejdo/web:
+
+| Setting | Value |
+|---|---|
+| Build command | npm run build |
+| Output directory | dist |
+| Production branch | main |
+
+2. Set up Resend (before the form can send)
+
+- resend.com → add domain pejdo.com → add the SPF/DKIM records it gives you in 
+Cloudflare DNS. Without these, mail is rejected or lands in spam.
+- Create an API key.
+
+3. Add four variables to the Pages project (Settings → Environment variables → 
+Production):
+
+| Name | Value | Type |
+|---|---|---|
+| RESEND_API_KEY | your re_… key | Secret |
+| CONTACT_TO | nikola@pejdo.com | Plaintext |
+| CONTACT_FROM | web@pejdo.com | Plaintext |
+| PUBLIC_CONTACT_FORM_ENDPOINT | /api/contact | Plaintext |
+
+That last one is the switch that moves the form off mailto:. Leave it unset 
+until the Pages deploy is confirmed working, so the form never 404s again.
+
+4. Move the domain — once the Pages deploy serves correctly on its *.pages.dev 
+URL, add pejdo.com as a custom domain there and remove it from the old Worker. 
+Test on pages.dev first; that way nothing user-facing breaks if something's off.
+
+I found and fixed one thing that would have broken your very first Pages build: 
+Astro 7 requires Node ≥22.12, and Pages defaults to an older version when a 
+project doesn't pin one. There was no pin, so the build would have failed 
+immediately. Added .node-version and an engines field.
+
+I also verified the function properly this time, executing the real handler with
+a stubbed mail API rather than just reading the source — 24 checks, all 
+passing. Confirmed: valid submissions send with the visitor in Reply-To and your
+domain in From; CRLF is stripped from the subject so a crafted input can't 
+inject a Bcc; <script> in the message is escaped in the HTML part; invalid input
+sends no mail at all; the honeypot silently discards; provider errors return a 
+generic 502 without leaking detail; and oversized messages are capped at 5,000 
+characters.
+
+Wrangler wouldn't stay running in this environment, so the one thing still 
+unverified is the function under Cloudflare's actual runtime. Once the Pages 
+deploy is up, curl -X POST https://your-project.pages.dev/api/contact should 
+return a 303 redirect rather than a 404 — tell me what you get and we'll confirm
+from there.
+

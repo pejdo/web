@@ -1,0 +1,77 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import VideoEmbed from '@/components/sections/VideoEmbed.astro';
+import { fetchVimeoVideos } from '@/lib/vimeo';
+
+/**
+ * Vimeo videos shown on this page, in display order.
+ *
+ * Metadata (title, poster, duration) is read from Vimeo's public oEmbed
+ * endpoint at build time - no API key needed, but the video must be public or
+ * unlisted-with-hash. Unreadable videos are skipped with a build warning rather
+ * than breaking the build.
+ *
+ * Replace these with your own links. Accepted shapes:
+ *   https://vimeo.com/123456789
+ *   https://vimeo.com/123456789/abcdef1234   (unlisted, hash in the path)
+ *   https://vimeo.com/123456789?h=abcdef1234 (unlisted, hash as a parameter)
+ *
+ * A single link can also be supplied through PUBLIC_VIMEO_VIDEO_URL in .env,
+ * which takes precedence when set.
+ */
+const configuredUrl = import.meta.env.PUBLIC_VIMEO_VIDEO_URL;
+
+const videoUrls = configuredUrl
+  ? [configuredUrl]
+  : [
+      // Placeholder - Blender's Big Buck Bunny, Creative Commons licensed.
+      'https://vimeo.com/1084537',
+    ];
+
+const videos = await fetchVimeoVideos(videoUrls, { width: 1280 });
+const usingPlaceholder = !configuredUrl;
+---
+
+<BaseLayout
+  title="Video"
+  description="Videozapisi s Vimea - reprodukcija se pokreće na klik, bez praćenja i bez učitavanja playera dok ga ne zatražite."
+>
+  <section class="pt-12 pb-6 md:pt-16 md:pb-8 px-6">
+    <div class="container max-w-3xl mx-auto text-center" data-animate>
+      <h1 class="font-serif text-4xl font-bold leading-[1.1] md:text-5xl">Video</h1>
+    </div>
+  </section>
+
+  {
+    videos.length > 0 ? (
+      <VideoEmbed videos={videos} single={videos.length === 1} spacing="tight" />
+    ) : (
+      <section class="pb-20 px-6">
+        <div class="container max-w-2xl mx-auto rounded-xl border bg-card p-8 text-center">
+          <h2 class="text-xl font-semibold">Video još nije povezan</h2>
+          <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
+            Postavite <code class="font-mono">PUBLIC_VIMEO_VIDEO_URL</code> u
+            <code class="font-mono">.env</code>, ili upišite Vimeo poveznice u
+            <code class="font-mono">src/pages/video.astro</code>. Video mora biti javan ili nejavan
+            s hashem u poveznici.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    usingPlaceholder && videos.length > 0 && (
+      <section class="pb-20 px-6">
+        <div class="container max-w-2xl mx-auto rounded-lg border border-dashed bg-card p-5 text-center">
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Prikazan je primjer videa. Zamijenite ga svojim: postavite
+            <code class="font-mono">PUBLIC_VIMEO_VIDEO_URL</code> u
+            <code class="font-mono">.env</code> ili uredite popis u
+            <code class="font-mono">src/pages/video.astro</code>.
+          </p>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

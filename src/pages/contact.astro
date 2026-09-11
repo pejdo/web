@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Contact from '@/components/sections/Contact.astro';
+
+/**
+ * Contact form delivery.
+ *
+ * The form POSTs to whatever PUBLIC_CONTACT_FORM_ENDPOINT is set to. Set it to
+ * /api/contact to use the Cloudflare Pages Function in functions/api/contact.ts,
+ * which sends the message through Resend. When the variable is empty the form
+ * falls back to a mailto: action: not ideal, but it never loses a message and
+ * never posts to a 404.
+ *
+ * Leave the variable unset until the deployment actually serves /api/contact
+ * (Cloudflare Pages does so from the functions/ directory; a plain Worker with
+ * static assets does not).
+ */
+const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT;
+const contactEmail = 'nikola@pejdo.com';
+
+/** A mailto: submission cannot report a result, so banners need a real endpoint. */
+const usesEndpoint = Boolean(formEndpoint);
+
+/**
+ * Result banners. The page is statically built and cannot read the ?poruka=
+ * flag at build time, so all three are rendered hidden and a small script
+ * reveals whichever one matches. Without JavaScript no banner appears, but the
+ * message is still delivered.
+ */
+const banners = [
+  {
+    key: 'ok',
+    tone: 'success',
+    title: 'Poruka je poslana.',
+    body: 'Hvala na poruci — javit ću se u najkraćem roku.',
+  },
+  {
+    key: 'invalid',
+    tone: 'error',
+    title: 'Poruka nije poslana.',
+    body: 'Provjerite ime, ispravnost e-mail adrese i tekst poruke, pa pokušajte ponovno.',
+  },
+  {
+    key: 'error',
+    tone: 'error',
+    title: 'Poruka nije poslana.',
+    body: `Došlo je do tehničke pogreške. Pokušajte ponovno ili pišite izravno na ${contactEmail}.`,
+  },
+] as const;
+---
+
+<BaseLayout
+  title="Kontakt"
+  description="Javite se s pitanjem, upitom za projekt ili povratnom informacijom. Odgovaram u najkraćem roku."
+>
+  {
+    usesEndpoint && (
+      <div class="container max-w-5xl mx-auto px-6">
+        {banners.map((banner) => (
+          <div
+            data-poruka={banner.key}
+            hidden
+            role={banner.tone === 'error' ? 'alert' : 'status'}
+            class:list={[
+              'mt-8 rounded-lg border p-4',
+              banner.tone === 'success'
+                ? 'border-maslina/40 bg-maslina/5'
+                : 'border-destructive/40 bg-destructive/5',
+            ]}
+          >
+            <p class="font-medium text-foreground">{banner.title}</p>
+            <p class="mt-1 text-sm text-muted-foreground leading-relaxed">{banner.body}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  <Contact
+    title="Javite se"
+    subtitle="Pitanja, upiti za projekt ili povratne informacije — pošaljite poruku i javit ću se u najkraćem roku."
+    email={contactEmail}
+    formAction={formEndpoint ?? `mailto:${contactEmail}`}
+    formSubject="Nova poruka s web stranice"
+  />
+</BaseLayout>
+
+<script>
+  /**
+   * Reveals the banner matching ?poruka=... after the form handler redirects
+   * back, then strips the parameter so a reload shows nothing stale.
+   */
+  function showContactResult(): void {
+    const status = new URLSearchParams(window.location.search).get('poruka');
+    if (!status) return;
+
+    const banner = document.querySelector<HTMLElement>(`[data-poruka="${CSS.escape(status)}"]`);
+    if (!banner) return;
+
+    banner.removeAttribute('hidden');
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('poruka');
+    window.history.replaceState({}, '', url);
+  }
+
+  showContactResult();
+  document.addEventListener('astro:after-swap', showContactResult);
+</script>

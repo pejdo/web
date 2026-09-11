@@ -1,161 +1,239 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Hero from '@/components/sections/Hero.astro';
-import LogoCloud from '@/components/sections/LogoCloud.astro';
-import Features from '@/components/sections/Features.astro';
-import AIFeature from '@/components/sections/AIFeature.astro';
-import Stats from '@/components/sections/Stats.astro';
-import FAQ from '@/components/sections/FAQ.astro';
 
-const features = [
+/*
+ * OBITELJ PEJDO — naslovna stranica
+ *
+ * VAŽNO ZA DOPUNU:
+ * Opisi Hercegovine i Brotnja općeniti su i provjerljivi. Konkretni
+ * obiteljski podaci (imena predaka, godine, priče) NISU izmišljeni —
+ * upisuju se u `obiteljskiZapisi` kako se prikupe.
+ */
+
+// Rodno mjesto
+const rodnoMjesto = {
+  selo: 'Blizanci',
+  opcina: 'Čitluk',
+  kraj: 'Brotnjo',
+  zupanija: 'Hercegovina, Bosna i Hercegovina',
+};
+
+// Kraj i obicaji — opci, provjerljivi opis hercegovackog podneblja
+const kraj = [
   {
-    title: 'For Real Websites',
-    description:
-      'Company sites, blogs, portfolios, landing pages — with working example pages for each. Deliberately not built for dashboards or app-heavy products.',
-    icon: 'globe',
+    naslov: 'Brotnjo',
+    tekst:
+      'Blizanci leže na Brotnju, kamenoj visoravni između Neretve i Mostarskog blata, u općini Čitluk. Visoravan je poznata po vinogradima i po tome što se zemlja tu osvaja od kamena, parcelu po parcelu.',
   },
   {
-    title: 'AI Guardrails Built In',
-    description:
-      'A convention guard hook blocks off-system edits — hardcoded colors, deprecated patterns — before they ever reach your code.',
-    icon: 'shield',
+    naslov: 'Kamen',
+    tekst:
+      'Hercegovina je zemlja krša — bijelog vapnenca koji izlazi na površinu gdje god zemlja nije obrađena. Kuće, ograde i suhozidi stoljećima se grade od onoga što je pod nogama, bez veziva, kamen na kamen.',
   },
   {
-    title: 'One Design System',
-    description:
-      'OKLCH color tokens, spacing, and typography defined once. Dark mode included — and your AI assistant cannot break it.',
-    icon: 'chart',
+    naslov: 'Vino',
+    tekst:
+      'Brotnjo je vinogradarski kraj s autohtonim sortama — žilavkom među bijelim i blatinom među crnim vinima. Domaći podrum i vlastita loza dio su svakodnevice, ne turističkog ukrasa.',
   },
   {
-    title: 'Docs for Humans & AI',
-    description:
-      'Every task is documented two ways: tell your coding assistant what you want, or follow the manual steps yourself.',
-    icon: 'users',
+    naslov: 'Sunce i voda',
+    tekst:
+      'Ljeta su duga i vruća, a voda dragocjena. Na kamenim visoravnima uz lozu rastu smokve, šipak i tabak, a bura i sunce oblikuju i zemlju i ljude.',
   },
   {
-    title: 'Quality Checks in One Command',
-    description:
-      'npm run check:kpis verifies colors, alt texts, meta descriptions, and deprecated imports. Lighthouse scores of 99-100 out of the box.',
-    icon: 'lock',
+    naslov: 'Vjera',
+    tekst:
+      'Hrvati u Hercegovini pripadaju Katoličkoj crkvi, a franjevci su stoljećima nosili župe, škole i pismenost kroz razdoblja u kojima drugih ustanova nije bilo. Crkveni kalendar i danas označava godinu.',
   },
   {
-    title: 'Astro Performance',
-    description:
-      'Static HTML with islands architecture: fast loads, clean SEO, sitemap and RSS included — what content sites actually need.',
-    icon: 'zap',
+    naslov: 'Rod i kuća',
+    tekst:
+      'Rodbinske veze idu široko — braća, sestre, stričevi, ujaci i kumovi drže obitelj povezanom i kad se raseli. Kuća se ne prodaje lako; ostaje mjesto na koje se vraća.',
+  },
+  {
+    naslov: 'Put u svijet',
+    tekst:
+      'Iz Hercegovine se stoljećima odlazilo na rad — u Njemačku, Austriju, Švicarsku, a prije toga preko oceana u Ameriku, Kanadu i Australiju. Malo je obitelji bez rodbine u dijaspori.',
   },
 ];
 
-const faqs = [
+/*
+ * OBITELJSKI ZAPISI
+ *
+ * Rodno mjesto je poznato i upisano. Ostalo (najstariji poznati predak,
+ * godine, grane obitelji) upisuje se kako se prikupi iz župnih knjiga i
+ * obiteljskog pamćenja. Ne upisujem podatke koje nemam.
+ */
+const obiteljskiZapisi: Array<{ naslov: string; tekst: string }> = [
   {
-    question: 'Is AstroDeck free?',
-    answer:
-      'Yes. AstroDeck is MIT-licensed and completely free — for personal and commercial projects, forever.',
-  },
-  {
-    question: 'What kind of websites is it for?',
-    answer:
-      'Company and marketing sites, blogs and editorial sites, portfolios, and landing pages. It is deliberately not built for dashboards or app-heavy products.',
-  },
-  {
-    question: 'Which AI tools does it work with?',
-    answer:
-      'Any tool that supports the AGENTS.md standard: Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Windsurf, Zed, Aider, and more. Claude Code gets the deepest integration — a dedicated agent, domain skills, slash commands, and the convention guard hook.',
-  },
-  {
-    question: 'Can I use it without AI?',
-    answer:
-      'Absolutely. AstroDeck is a normal, well-documented Astro starter kit. Every task in the docs is shown two ways: with AI and manually.',
-  },
-  {
-    question: 'Do I need to know Astro?',
-    answer:
-      'It helps, but it is not required. If you work with an AI assistant, it knows the conventions from AGENTS.md and does the heavy lifting. If you prefer to code yourself, the docs walk you through every task.',
-  },
-  {
-    question: 'How opinionated is it?',
-    answer:
-      'There is one design-token system (OKLCH colors, spacing, typography) and a set of conventions — that is what keeps AI output consistent. Everything is overridable: your own rules go in PROJECT.md, your own brand goes in globals.css or a DESIGN.md.',
+    naslov: 'Rodno mjesto',
+    tekst: `${rodnoMjesto.selo}, općina ${rodnoMjesto.opcina} — na Brotnju, u Hercegovini.`,
   },
 ];
 ---
 
 <BaseLayout
-  title="Astro Starter Kit for AI-Assisted Websites"
-  description="Open-source Astro starter kit for AI-assisted websites. Build company sites, blogs, and portfolios with Claude Code, Cursor & Co. on guarded design rails."
+  title="Obitelj Pejdo"
+  description="Obitelj Pejdo — hrvatski rod iz Blizanaca, općina Čitluk, na hercegovačkom Brotnju. Zapisi o rodnom kraju, tradiciji i obiteljskoj povijesti."
 >
-  <Hero
-    badge="true"
-    title="The starter kit for AI-assisted websites."
-    subtitle="Start from a complete foundation — pages, sections, and a design system — and let <mark>Claude Code, Cursor, or any coding agent</mark> build your <mark>company site, blog, or portfolio</mark>. Conventions via <mark>AGENTS.md</mark>, enforced by <mark>built-in guardrails</mark>, so AI edits never go off-system."
-    prompt="Clone https://github.com/holger1411/astrodeck as the foundation for my new website. Install the dependencies, read AGENTS.md, start the dev server, and give me a short tour of the project."
-    primaryCta={{
-      href: 'https://github.com/holger1411/astrodeck/releases/latest',
-      label: 'Download',
-    }}
-    secondaryCta={{ href: 'https://github.com/holger1411/astrodeck', label: 'GitHub' }}
-  />
+  {/* ===== Hero ===== */}
+  <section class="section-kamen relative overflow-hidden">
+    <div class="sahovnica-band" aria-hidden="true"></div>
 
-  <LogoCloud />
+    <div class="container max-w-5xl mx-auto px-6 py-20 md:py-28" data-animate="fade">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terakota">
+        Blizanci <span aria-hidden="true">·</span> Čitluk <span aria-hidden="true">·</span> Brotnjo
+      </p>
 
-  <AIFeature />
+      <h1
+        class="font-serif-display mt-6 text-5xl leading-[1.05] md:text-7xl lg:text-8xl max-w-4xl text-balance"
+      >
+        Pejdo
+      </h1>
 
-  <div class="section-inverted py-8">
-    <Stats
-      stats={[
-        { value: '16', label: 'Sections', description: 'Hero, pricing, FAQ, team & more' },
-        { value: '11', label: 'UI Components', description: 'shadcn/ui + Radix' },
-        { value: '11', label: 'Example Pages', description: 'SaaS, portfolio, blog & more' },
-        { value: '100', label: 'Lighthouse', description: 'Accessibility, Best Practices & SEO' },
-      ]}
-    />
-  </div>
+      <div class="pleter-rule mt-8 max-w-xs" aria-hidden="true"></div>
 
-  <Features
-    title="More than a theme, calmer than an AI builder"
-    subtitle="A complete website foundation — plus the operating layer your AI assistant needs to stay on track."
-    features={features}
-  />
+      <p class="mt-8 max-w-2xl text-lg md:text-xl leading-relaxed">
+        Hrvatski rod iz Blizanaca u općini Čitluk, na hercegovačkom Brotnju — kraju kamena, sunca i
+        loze. Ova stranica čuva zapise o rodnom mjestu, običajima i ljudima koji nose ime Pejdo, u
+        domovini i u dijaspori.
+      </p>
 
-  <div class="bg-muted/30">
-    <FAQ
-      title="Frequently asked questions"
-      subtitle="The short version of everything you might want to know."
-      faqs={faqs}
-    />
-  </div>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4">
+        <a
+          href="#kraj"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          O kraju
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-input bg-background text-sm font-medium h-12 px-8 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          Javite se
+        </a>
+      </div>
+    </div>
 
-  <div class="section-inverted">
-    <section class="py-20 md:py-32 px-6">
+    <div class="sahovnica-band" aria-hidden="true"></div>
+  </section>
+
+  {/* ===== Uvod ===== */}
+  <section class="py-16 md:py-24">
+    <div class="container max-w-3xl mx-auto px-6" data-animate="fade">
+      <h2 class="font-serif-display text-3xl md:text-4xl">Ime i podrijetlo</h2>
+      <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
+
+      <p class="pocetno-slovo mt-8 text-lg leading-relaxed text-foreground">
+        Pejdo je obiteljsko ime koje nose Hrvati iz Blizanaca, sela u općini Čitluk na Brotnju —
+        kamenoj visoravni između Neretve i Mostarskog blata. Kao i mnoga hercegovačka obiteljska
+        imena, prenosilo se usmeno kroz naraštaje prije nego što je zapisano u matične knjige koje
+        su vodile župe.
+      </p>
+
+      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+        Povijest jedne obitelji ne stoji u knjigama nego u ljudima — u tome gdje je čija kuća, koja
+        je loza čija, kome se ide na slavu i koga se spominje na Svi svete. Dio toga zapisan je u
+        župnim knjigama, dio postoji samo dok ga se prenosi dalje.
+      </p>
+
+      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+        Ova stranica postoji da se taj drugi dio ne izgubi. Ako imate podatke, fotografije ili priče
+        iz obitelji, dobro su došli — svaki zapis nadopunjuje sliku.
+      </p>
+    </div>
+  </section>
+
+  {/* ===== Kraj i obicaji ===== */}
+  <section id="kraj" class="section-kamen py-16 md:py-24 scroll-mt-16">
+    <div class="container max-w-5xl mx-auto px-6">
+      <div class="max-w-2xl">
+        <h2 class="font-serif-display text-3xl md:text-4xl">Kraj i običaji</h2>
+        <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
+        <p class="mt-6 text-lg leading-relaxed">
+          Hercegovina oblikuje one koji iz nje dolaze. Ovo je kratak opis podneblja i načina života
+          koji stoji u pozadini svake hercegovačke obiteljske priče.
+        </p>
+      </div>
+
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-12" data-animate="fade">
+        {
+          kraj.map((blok) => (
+            <article class="border-l-2 border-terakota pl-6">
+              <h3 class="font-serif-display text-2xl">{blok.naslov}</h3>
+              <p class="mt-3 leading-relaxed">{blok.tekst}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="sahovnica-band" aria-hidden="true"></div>
+
+  {/* ===== Obiteljski zapisi ===== */}
+  <section class="py-16 md:py-24">
+    <div class="container max-w-3xl mx-auto px-6" data-animate="fade">
+      <h2 class="font-serif-display text-3xl md:text-4xl">Obiteljski zapisi</h2>
+      <div class="pleter-rule mt-5 max-w-[10rem]" aria-hidden="true"></div>
+
+      {
+        obiteljskiZapisi.length > 0 && (
+          <dl class="mt-8 space-y-6">
+            {obiteljskiZapisi.map((zapis) => (
+              <div class="border-l-2 border-terakota pl-6">
+                <dt class="font-serif-display text-xl">{zapis.naslov}</dt>
+                <dd class="mt-2 leading-relaxed text-muted-foreground">{zapis.tekst}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+
+      <div class="mt-8 rounded-lg border border-dashed bg-muted/40 p-6 md:p-8">
+        <p class="leading-relaxed text-muted-foreground">
+          Zapisi o najstarijim poznatim precima i granama obitelji upisuju se kako se prikupe iz
+          župnih knjiga i obiteljskog pamćenja.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Imate podatak, fotografiju ili priču?{' '}
+          <a
+            href="/contact"
+            class="font-medium text-foreground underline decoration-terakota decoration-2 underline-offset-4 hover:text-terakota transition-colors"
+          >
+            Javite se
+          </a>{' '}
+          i bit će uvršteno.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Zavrsni poziv ===== */}
+  <section class="section-inverted">
+    <div class="sahovnica-band" aria-hidden="true"></div>
+    <div class="py-20 md:py-28 px-6">
       <div class="container max-w-3xl mx-auto text-center" data-animate="scale">
-        <h2 class="text-3xl font-bold leading-tight md:text-5xl">Start from a clean foundation.</h2>
+        <h2 class="font-serif-display text-3xl md:text-5xl">Nosite li i vi ime Pejdo?</h2>
         <p class="mt-6 text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Download AstroDeck, open it in your coding assistant, and say what you want to build. Free
-          and open source — forever.
+          Rod je razgranat i raseljen. Ako znate dio priče — iz Hercegovine ili iz dijaspore —
+          javite se i dopunimo zapis zajedno.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
           <a
-            href="https://github.com/holger1411/astrodeck/releases/latest"
-            class="group relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 h-12 px-12 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 overflow-hidden"
+            href="/contact"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-terakota text-terakota-foreground text-base font-semibold h-12 px-10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            <span
-              class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-              aria-hidden="true"></span>
-            <span
-              class="relative z-10 inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-              >Download</span
-            >
+            Javite se
           </a>
           <a
-            href="https://github.com/holger1411/astrodeck"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-12 px-8"
+            href="mailto:nikola@pejdo.com"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-input bg-background text-sm font-medium h-12 px-8 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            GitHub
+            nikola@pejdo.com
           </a>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </BaseLayout>

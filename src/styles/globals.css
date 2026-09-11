@@ -29,6 +29,24 @@
     'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 
+  /* Serif stack for headings in the regional (Croatian/Herzegovinian) style.
+     Uses system serifs so no extra font files are shipped. */
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+
+  /* ===== Regional palette (Croatian / Herzegovinian) =====
+     kamen    — topli vapnenac, kamen dalmatinskih i hercegovackih zidova
+     terakota — crvena iz sahovnice i kupe na krovovima
+     more     — jadranska plava
+     maslina  — siva zelen masline i smilja
+     zlato    — zito, suho polje, ljetno svjetlo */
+  --color-kamen: oklch(94% 0.008 85);
+  --color-kamen-foreground: oklch(25% 0.015 70);
+  --color-terakota: oklch(52% 0.17 28);
+  --color-terakota-foreground: oklch(98% 0.005 80);
+  --color-more: oklch(45% 0.09 230);
+  --color-maslina: oklch(48% 0.055 125);
+  --color-zlato: oklch(62% 0.1 80);
+
   /* Light mode colors */
   --color-background: oklch(100% 0 0);
   --color-foreground: oklch(9.8% 0.0016 286.75);
@@ -49,6 +67,11 @@
   --color-border: oklch(91.4% 0.009 286.75);
   --color-input: oklch(91.4% 0.009 286.75);
   --color-ring: oklch(9.8% 0.0016 286.75);
+
+  /* Canvas for images that carry a baked-in white background (JPEG logos,
+     scans). Stays light in both themes so such images do not appear as harsh
+     white rectangles on a near-black dark-mode surface. */
+  --color-image-canvas: oklch(97% 0.0011 286.75);
 
   --radius: 0.5rem;
 
@@ -95,6 +118,16 @@
   --color-border: oklch(25% 0 0);
   --color-input: oklch(25% 0 0);
   --color-ring: oklch(80% 0 0);
+
+  /* Regional palette — dark mode: light the stone, lift the accents so they
+     stay legible against a near-black background */
+  --color-kamen: oklch(16% 0.01 70);
+  --color-kamen-foreground: oklch(92% 0.01 80);
+  --color-terakota: oklch(62% 0.15 28);
+  --color-terakota-foreground: oklch(12% 0.01 40);
+  --color-more: oklch(65% 0.1 230);
+  --color-maslina: oklch(66% 0.06 125);
+  --color-zlato: oklch(75% 0.1 80);
 }
 
 * {
@@ -124,6 +157,71 @@ mark {
 /* Subtle gray background */
 .section-muted {
   background-color: var(--color-muted);
+}
+
+/* ===== Regional style utilities (Croatian / Herzegovinian) ===== */
+
+/* Serif display type for headings in the regional style */
+.font-serif-display {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* Stone section: warm limestone ground, the base surface of the style */
+.section-kamen {
+  background-color: var(--color-kamen);
+  color: var(--color-kamen-foreground);
+}
+
+/* Checkerboard band — the sahovnica motif, used as a thin decorative rule.
+   Two red squares against the page background, repeating horizontally. */
+.sahovnica-band {
+  height: 0.75rem;
+  background-image:
+    linear-gradient(
+      45deg,
+      var(--color-terakota) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-terakota) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--color-terakota) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--color-terakota) 75%
+    );
+  background-size: 1.5rem 1.5rem;
+  background-position:
+    0 0,
+    0.75rem 0.75rem;
+  opacity: 0.85;
+}
+
+/* Woven border, echoing traditional embroidery trim (pleter) */
+.pleter-rule {
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-terakota) 0 0.5rem,
+    transparent 0.5rem 0.75rem,
+    var(--color-zlato) 0.75rem 1.25rem,
+    transparent 1.25rem 1.5rem
+  );
+}
+
+/* Drop cap for opening paragraphs, as in older printed Croatian editions */
+.pocetno-slovo::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 3.25rem;
+  line-height: 0.82;
+  font-weight: 700;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  color: var(--color-terakota);
 }
 
 /* Inverted section: dark bg in light mode, light bg in dark mode */

@@ -1,7 +1,8 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "//": "functions/ is excluded because it is Cloudflare Worker code: it has its own tsconfig with Worker types, which must not mix with the browser DOM types used in src/.",
+  "exclude": ["dist", "functions"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

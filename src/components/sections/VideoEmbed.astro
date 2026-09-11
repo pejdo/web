@@ -1,0 +1,193 @@
+---
+/**
+ * VideoEmbed Section Component
+ *
+ * Renders Vimeo videos as click-to-play facades: a poster image with a play
+ * button, which swaps in the real <iframe> only once the visitor asks for it.
+ *
+ * Why a facade instead of a plain iframe:
+ * - No third-party request, cookie, or script until the visitor opts in
+ * - The player is a heavy embed; deferring it keeps the page fast
+ * - Nothing is sent to Vimeo for visitors who never press play
+ *
+ * Without JavaScript the facade degrades to a link to the video on vimeo.com,
+ * so the content stays reachable.
+ *
+ * @example
+ * ```astro
+ * <VideoEmbed
+ *   title="Video"
+ *   videos={[{ id: "1084537", title: "Big Buck Bunny", ... }]}
+ * />
+ * ```
+ *
+ * @customization
+ * - Grid columns: adjust the md:grid-cols-2 class on the list
+ * - Poster aspect ratio comes from each video's own dimensions
+ */
+import { formatDuration, vimeoPlayerUrl, type VimeoVideo } from '@/lib/vimeo';
+
+interface Props {
+  /** Section heading, rendered as h2 */
+  title?: string;
+  /** Supporting text below the heading */
+  subtitle?: string;
+  /** Videos to show, in display order */
+  videos: VimeoVideo[];
+  /** One video per row, rather than a two-column grid */
+  single?: boolean;
+  /**
+   * Vertical rhythm.
+   * - 'default' uses the standard section padding
+   * - 'tight' drops the top padding, for sitting directly below a heading
+   */
+  spacing?: 'default' | 'tight';
+}
+
+const { title, subtitle, videos, single = false, spacing = 'default' } = Astro.props;
+
+const sectionSpacingClass = spacing === 'tight' ? 'pb-16 md:pb-24 px-6' : 'py-16 md:py-24 px-6';
+const gridClass = single ? 'grid gap-10' : 'grid gap-10 md:grid-cols-2';
+---
+
+{
+  videos.length > 0 && (
+    <section class:list={[sectionSpacingClass]}>
+      <div class="container max-w-5xl mx-auto">
+        {(title || subtitle) && (
+          <div class="flex flex-col items-center space-y-4 text-center mb-12" data-animate>
+            {title && (
+              <h2 class="font-serif text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
+                {title}
+              </h2>
+            )}
+            {subtitle && (
+              <p class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+                {subtitle}
+              </p>
+            )}
+          </div>
+        )}
+
+        <ul class:list={[gridClass, 'list-none p-0']} data-animate data-delay="1">
+          {videos.map((video, index) => (
+            <li>
+              <figure class="m-0">
+                <div
+                  class="video-facade relative overflow-hidden rounded-xl border bg-muted aspect-video"
+                  data-video-facade
+                  data-player-url={vimeoPlayerUrl(video, true)}
+                  data-video-title={video.title}
+                >
+                  {video.thumbnailUrl ? (
+                    <img
+                      src={video.thumbnailUrl}
+                      alt={`Naslovna slika videa: ${video.title}`}
+                      width={video.thumbnailWidth ?? undefined}
+                      height={video.thumbnailHeight ?? undefined}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      class="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center bg-muted text-sm text-muted-foreground">
+                      Nema naslovne slike
+                    </div>
+                  )}
+
+                  {/* Fallback for no-JS: a plain link to the video. The script
+                      replaces this with a play button that loads the player. */}
+                  <a
+                    href={`https://vimeo.com/${video.id}${video.hash ? `/${video.hash}` : ''}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-video-link
+                    class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-foreground/25 text-background transition-colors hover:bg-foreground/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  >
+                    <span class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg backdrop-blur">
+                      <svg
+                        width="26"
+                        height="26"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                    <span class="sr-only" data-video-link-label>
+                      Otvori „{video.title}” na Vimeu
+                    </span>
+                  </a>
+
+                  {video.duration !== null && (
+                    <span class="pointer-events-none absolute bottom-3 right-3 rounded-md bg-foreground/80 px-2 py-1 font-mono text-xs text-background">
+                      {formatDuration(video.duration)}
+                    </span>
+                  )}
+                </div>
+
+                <figcaption class="mt-3">
+                  <p class="font-medium text-foreground">{video.title}</p>
+                  {video.authorName && (
+                    <p class="mt-0.5 text-sm text-muted-foreground">{video.authorName}</p>
+                  )}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  /**
+   * Turns each facade's fallback link into a play button that swaps in the
+   * Vimeo iframe on activation. Runs only when JavaScript is available, so the
+   * link keeps working otherwise.
+   */
+  function initVideoFacades(): void {
+    const facades = document.querySelectorAll<HTMLElement>('[data-video-facade]:not([data-ready])');
+
+    facades.forEach((facade) => {
+      const link = facade.querySelector<HTMLAnchorElement>('[data-video-link]');
+      const playerUrl = facade.dataset.playerUrl;
+      const videoTitle = facade.dataset.videoTitle ?? 'Video';
+      if (!link || !playerUrl) return;
+
+      facade.setAttribute('data-ready', '');
+
+      // Swap the outbound link for a button: same position, same appearance,
+      // but it loads the player in place instead of leaving the page.
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = link.className;
+      button.innerHTML = link.innerHTML;
+
+      const label = button.querySelector<HTMLElement>('[data-video-link-label]');
+      if (label) label.textContent = `Pokreni video: ${videoTitle}`;
+
+      button.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = playerUrl;
+        iframe.title = videoTitle;
+        iframe.className = 'absolute inset-0 h-full w-full';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+
+        facade.replaceChildren(iframe);
+        // Move focus into the player so keyboard users land on the controls.
+        iframe.focus();
+      });
+
+      link.replaceWith(button);
+    });
+  }
+
+  initVideoFacades();
+  document.addEventListener('astro:after-swap', initVideoFacades);
+</script>

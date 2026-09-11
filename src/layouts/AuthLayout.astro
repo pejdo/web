@@ -10,6 +10,7 @@ import '@/styles/globals.css';
 import SEO from '@/components/SEO.astro';
 import Logo from '@/components/Logo.astro';
 import FontPreload from '@/components/FontPreload.astro';
+import Favicons from '@/components/Favicons.astro';
 import ThemeScript from '@/components/ThemeScript.astro';
 
 interface Props {
@@ -23,12 +24,12 @@ const fullTitle = `${title} | AstroDeck`;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="hr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <FontPreload />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Favicons />
     <title>{fullTitle}</title>
     <SEO title={fullTitle} description={description} noindex={true} />
     <ClientRouter />

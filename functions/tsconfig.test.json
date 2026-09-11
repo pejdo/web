@@ -1,0 +1,9 @@
+{
+  "//": "Tests for the Functions. They execute on Node's test runner rather than in a Worker, so they need Node's types alongside the Worker ones. Kept separate so the Worker config stays free of Node globals: code that ships to Cloudflare must not be able to reference them.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types", "node"]
+  },
+  "include": ["**/*.test.ts", "**/*.ts"],
+  "exclude": []
+}

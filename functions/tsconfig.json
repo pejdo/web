@@ -1,0 +1,14 @@
+{
+  "//": "Scoped to the Cloudflare Pages Functions. Worker globals are kept out of the site's own tsconfig so they cannot clash with the browser DOM types used in src/. Tests are excluded here because they run on Node rather than in a Worker, and get their own config in tsconfig.test.json.",
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types"],
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ES2022",
+    "noEmit": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.test.ts"]
+}
