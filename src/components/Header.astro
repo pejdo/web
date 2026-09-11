@@ -13,6 +13,7 @@
  */
 import ThemeToggle from './ThemeToggle.astro';
 import Logo from './Logo.astro';
+import SiteSearch from './SiteSearch.astro';
 
 interface Props {
   /** Layout variant - boxed (default) or fullWidth */
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/latinski', label: 'Latinski' },
   { href: '/fotos', label: 'Fotos' },
   { href: '/video', label: 'Video' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Kontakt' },
 ];
 
@@ -119,35 +121,41 @@ const containerClass =
       }
     </nav>
 
-    <!-- Desktop Actions (hidden on mobile) -->
-    <div class="hidden md:flex items-center space-x-2">
-      <ThemeToggle />
-    </div>
+    <!-- Actions. Search is rendered once, outside the breakpoint-specific groups:
+         two instances would duplicate the input id and only one would be wired up. -->
+    <div class="flex items-center space-x-1 sm:space-x-2">
+      <SiteSearch />
 
-    <!-- Mobile Actions (visible on mobile) -->
-    <div class="flex md:hidden items-center space-x-2">
-      <ThemeToggle />
-      <button
-        id="mobile-menu-button"
-        class="inline-flex items-center justify-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
-        aria-expanded="false"
-        aria-label="Toggle navigation menu"
-      >
-        <span class="w-6 h-6 relative flex flex-col justify-center items-center">
-          <span
-            id="hamburger-top"
-            class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300 absolute -translate-y-1.5"
-          ></span>
-          <span
-            id="hamburger-middle"
-            class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300"
-          ></span>
-          <span
-            id="hamburger-bottom"
-            class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300 absolute translate-y-1.5"
-          ></span>
-        </span>
-      </button>
+      <!-- Desktop Actions (hidden on mobile) -->
+      <div class="hidden md:flex items-center space-x-2">
+        <ThemeToggle />
+      </div>
+
+      <!-- Mobile Actions (visible on mobile) -->
+      <div class="flex md:hidden items-center space-x-2">
+        <ThemeToggle />
+        <button
+          id="mobile-menu-button"
+          class="inline-flex items-center justify-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+          aria-expanded="false"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="w-6 h-6 relative flex flex-col justify-center items-center">
+            <span
+              id="hamburger-top"
+              class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300 absolute -translate-y-1.5"
+            ></span>
+            <span
+              id="hamburger-middle"
+              class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300"
+            ></span>
+            <span
+              id="hamburger-bottom"
+              class="block w-5 h-0.5 bg-current transform transition-[transform,opacity] duration-300 absolute translate-y-1.5"
+            ></span>
+          </span>
+        </button>
+      </div>
     </div>
   </div>
 

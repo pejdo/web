@@ -15,9 +15,16 @@
   type="font/woff2"
   crossorigin="anonymous"
 />
+<!--
+  EB Garamond powers every heading, which is above the fold on all pages, so the
+  latin subset is preloaded to avoid a flash of fallback serif. The latin-ext
+  subset (Croatian diacritics) is left to load on demand: it is larger and the
+  browser only fetches it for pages whose headings actually contain those
+  characters. Geist Mono is not preloaded either — it is used sparingly.
+-->
 <link
   rel="preload"
-  href="/fonts/GeistMono-Variable.woff2"
+  href="/fonts/EBGaramond-600-latin.woff2"
   as="font"
   type="font/woff2"
   crossorigin="anonymous"

@@ -35,3 +35,6 @@ system/reports/*.md
 
 # Claude Code local settings (per-developer, not shipped)
 .claude/settings.local.json
+
+# Kiro CLI local settings (per-developer, not shipped)
+.kiro/

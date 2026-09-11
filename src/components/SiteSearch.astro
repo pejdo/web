@@ -1,0 +1,258 @@
+---
+/**
+ * SiteSearch Component
+ *
+ * Small search box in the header, covering the whole site: zapisi, pjesme,
+ * sentencije and the pages themselves.
+ *
+ * How it works: /search.json is generated at build time and fetched once, the
+ * first time a visitor opens the box. Filtering then happens in the browser. No
+ * server, no third-party service, no API key - and no cost at all for visitors
+ * who never search, since the index is not inlined into the page.
+ *
+ * The trigger is rendered with the hidden attribute and revealed by the script, so
+ * without JavaScript nobody is shown a search box that cannot work.
+ *
+ * @example
+ * ```astro
+ * <SiteSearch />
+ * ```
+ */
+---
+
+<div class="relative" data-site-search>
+  <!-- Trigger: icon only on mobile, icon plus hint on wider screens -->
+  <button
+    type="button"
+    class="inline-flex items-center gap-2 rounded-md p-2 sm:pl-3 sm:pr-2 min-h-11 sm:min-h-9 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    aria-label="Pretraži stranicu"
+    aria-expanded="false"
+    hidden
+    data-search-open
+  >
+    <svg
+      class="h-4 w-4 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </svg>
+    <span class="hidden lg:inline text-sm">Traži</span>
+  </button>
+
+  <!-- Panel -->
+  <div
+    class="hidden fixed inset-x-0 top-14 z-50 border-b bg-background p-4 shadow-lg sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 sm:rounded-lg sm:border sm:p-3"
+    data-search-panel
+  >
+    <form role="search" aria-label="Pretraživanje stranice">
+      <label for="site-search-input" class="sr-only">Pretraži stranicu</label>
+      <input
+        id="site-search-input"
+        type="search"
+        autocomplete="off"
+        placeholder="Traži zapise, pjesme, sentencije"
+        class="w-full min-h-11 rounded-md border bg-card px-3 py-2 text-base sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-search-input
+      />
+    </form>
+
+    <p
+      class="mt-2 px-1 text-xs text-muted-foreground"
+      role="status"
+      aria-live="polite"
+      data-search-status
+    >
+    </p>
+
+    <ul class="mt-1 max-h-[60vh] overflow-y-auto" data-search-results></ul>
+  </div>
+</div>
+
+<script>
+  interface SearchDoc {
+    url: string;
+    title: string;
+    meta: string;
+    kind: string;
+    haystack: string;
+  }
+
+  /** Lowercases and strips diacritics, matching the folding used in search.json.ts. */
+  function fold(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd');
+  }
+
+  /** Croatian plural: 1 rezultat, 2-4 rezultata, 5+ rezultata. */
+  function resultLabel(count: number): string {
+    const lastTwo = count % 100;
+    const last = count % 10;
+    if (last === 1 && lastTwo !== 11) return `${count} rezultat`;
+    if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return `${count} rezultata`;
+    return `${count} rezultata`;
+  }
+
+  function initSiteSearch(): void {
+    const root = document.querySelector<HTMLElement>('[data-site-search]');
+    if (!root) return;
+
+    const trigger = root.querySelector<HTMLButtonElement>('[data-search-open]');
+    const panel = root.querySelector<HTMLElement>('[data-search-panel]');
+    const input = root.querySelector<HTMLInputElement>('[data-search-input]');
+    const results = root.querySelector<HTMLUListElement>('[data-search-results]');
+    const status = root.querySelector<HTMLElement>('[data-search-status]');
+
+    if (!trigger || !panel || !input || !results || !status) return;
+
+    // Only now is the box usable, so only now is it shown.
+    trigger.hidden = false;
+
+    let docs: SearchDoc[] | null = null;
+    let loading = false;
+    /** Index of the highlighted result, -1 when none. */
+    let active = -1;
+
+    /** Fetches the index once, then filters with whatever the input holds. */
+    async function load(): Promise<void> {
+      if (docs || loading) return;
+      loading = true;
+      status.textContent = 'Učitavanje…';
+      try {
+        const response = await fetch('/search.json');
+        if (!response.ok) throw new Error(String(response.status));
+        docs = (await response.json()) as SearchDoc[];
+        status.textContent = '';
+        render();
+      } catch {
+        status.textContent = 'Pretraživanje trenutno nije dostupno.';
+      } finally {
+        loading = false;
+      }
+    }
+
+    function open(): void {
+      panel!.classList.remove('hidden');
+      trigger!.setAttribute('aria-expanded', 'true');
+      input!.focus();
+      void load();
+    }
+
+    function close(): void {
+      panel!.classList.add('hidden');
+      trigger!.setAttribute('aria-expanded', 'false');
+      active = -1;
+    }
+
+    function render(): void {
+      const query = fold(input!.value.trim());
+      results!.innerHTML = '';
+      active = -1;
+
+      if (!docs || query === '') {
+        status!.textContent = '';
+        return;
+      }
+
+      const matches = docs.filter((doc) => doc.haystack.includes(query)).slice(0, 12);
+      status!.textContent =
+        matches.length === 0 ? 'Nema rezultata.' : `Pronađeno ${resultLabel(matches.length)}.`;
+
+      for (const doc of matches) {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = doc.url;
+        link.className =
+          'block rounded-md px-3 py-2 hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+
+        const row = document.createElement('div');
+        row.className = 'flex items-baseline justify-between gap-3';
+
+        const title = document.createElement('span');
+        title.className = 'text-sm font-medium text-foreground';
+        title.textContent = doc.title;
+
+        const kind = document.createElement('span');
+        kind.className = 'shrink-0 text-xs text-muted-foreground';
+        kind.textContent = doc.kind;
+
+        row.append(title, kind);
+
+        const meta = document.createElement('p');
+        meta.className = 'mt-0.5 text-xs text-muted-foreground line-clamp-1';
+        meta.textContent = doc.meta;
+
+        link.append(row, meta);
+        item.append(link);
+        results!.append(item);
+      }
+    }
+
+    /** Moves the highlight through the results and keeps it in view. */
+    function move(delta: number): void {
+      const links = Array.from(results!.querySelectorAll<HTMLAnchorElement>('a'));
+      if (links.length === 0) return;
+      active = (active + delta + links.length) % links.length;
+      links[active].focus();
+      links[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    trigger.addEventListener('click', () => {
+      if (panel.classList.contains('hidden')) open();
+      else close();
+    });
+
+    input.addEventListener('input', render);
+
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        close();
+        trigger.focus();
+        return;
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        move(1);
+        return;
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        move(-1);
+      }
+    });
+
+    // Enter from the input follows the first result, the common expectation.
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      const first = results.querySelector<HTMLAnchorElement>('a');
+      if (first) first.click();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!panel.classList.contains('hidden') && !root.contains(event.target as Node)) close();
+    });
+
+    // Slash opens search, as in most documentation sites, unless the visitor is
+    // already typing somewhere.
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return;
+      event.preventDefault();
+      open();
+    });
+  }
+
+  initSiteSearch();
+</script>
