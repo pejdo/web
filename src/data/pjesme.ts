@@ -53,60 +53,240 @@ Sve je tiši huk:
 Željeznicu guta već daljina.`,
   },
   {
-    title: 'Jesenje veče',
-    poet: 'Antun Gustav Matoš',
-    life: '1873 — 1914',
-    year: '1909',
-    sourceUrl: 'https://www.poezija.hr/jesenje-vece-antun-gustav-matos/',
+    title: 'Smrt i ja',
+    poet: 'Antun Branko Šimić',
+    life: '1898 — 1925',
+    year: '1913. – 1924.',
+    text: `Smrt nije izvan mene. Ona je u meni
+od najprvog početka: sa mnom raste
+u svakom času
+Jednog dana
+ja zastanem
+a ona raste dalje
+u meni dok me cijelog ne proraste
+i stigne na rub mene. Moj svršetak
+njen pravi je početak:
+kad kraljuje dalje sama`,
   },
   {
-    title: '1909',
-    poet: 'Antun Gustav Matoš',
-    life: '1873 — 1914',
-    year: '1909',
-    sourceUrl: 'https://www.poezija.hr/1909-antun-gustav-matos/',
+    title: 'Utjeha očiju',
+    poet: 'Antun Branko Šimić',
+    life: '1898 — 1925',
+    year: '1913. – 1924.',
+    text: `Draga, ovaj grad, što žut i sivkast tutnji,
+Pije svakog dana krv iz moga tijela
+I ja sahnem, sahnem, u zloj nekoj slutnji,
+Da se bliži starost krezuba i bijela.
+
+Draga, ovdje mene često žudnja svlada
+Za veselim mirom livada i voda,
+Za šumama punim sjenaka i hlada
+I za tromim lêtom oblaka i roda.
+
+Onda tražim tvojih očiju dubljine,
+Što ko plav i zelen bezdan mirno sjaju:
+U njima su nebo, rijeke i nizine,
+Vrtovi i kuće, ko u junskom kraju.
+
+U njima je hlad i svježina vrbika;
+Pod granama sjenke počivaju, duge;
+Kroz granje se vere satir, moga lika,
+Malko sulud i pun zagonetne tuge.
+
+Povrh žitâ, što se suncem zapaljena
+Žute i crljene, lete ptice neke;
+Lete, ko odrazi drugog svijeta snena,
+Na oblake neke svijetle i daleke.
+
+Draga, sve to jedna vizija mi biva,
+Iz očiju svet i čudan predjel sijeva.
+Onda tonu stvari, jedan svijet se skriva.
+Mirno u dnu junsko veče dogorijeva.`,
   },
   {
-    title: 'Svakidašnja jadikovka',
-    poet: 'Tin Ujević',
-    life: '1891 — 1955',
+    title: 'Vagonaši',
+    poet: 'Dobriša Cesarić',
+    life: '1902 — 1980',
+    year: '1930',
+    text: `Mi stanujemo u vagonu
+Što nije nikada na putu,
+U jednom kutu nam je krevet,
+A kuhinja u drugom kutu.
+
+Tu svaki vagon dimnjak ima,
+Željezni, nahereni, tužni.
+U ovom kraju stareži i dima
+Najljepši dan poružni.
+
+A naša ulica je duga,
+Duga,
+I čudno ima ime:
+Napuštena pruga.
+
+Sve kuće brojeve imadu,
+Pa ima ga i naša, bože moj.
+Al nema tako velikog u gradu
+Ko naš bijeli željeznički broj.
+
+I vrt imade naša kuća:
+Ukraj pruge drač,
+Da igrajuć se u njem djeca
+Zaborave na glad i plač.
+
+U nedjelju kad stane rad,
+Eh, onda bijeda pije, pije;
+Zapjeva neko hrapavim glasom,
+A neko ženu bije.
+
+Alkohol ubija... znamo, o znamo,
+Znamo da alkohol škodi,
+No rakije, rakije, rakije amo,
+Jer utjehe nema u vodi.
+
+Sada je ljeto... veliko, zlatno.
+Odoše bogataši iz grada
+Da traže odmora po svijetu,
+Al mi smo tu, mi roblje rada.
+
+I naše oči dalje gasnu,
+I znoje se u radu dlanovi;
+Umjesto nas putovahu svijetom
+Naši stanovi.
+
+Nedjelja. Tužno. Znamo, o znamo,
+Znamo da alkohol škodi,
+No rakije, rakije, rakije amo,
+Jer utjehe nema u vodi.`,
+  },
+  {
+    title: 'Voćka poslije kiše',
+    poet: 'Dobriša Cesarić',
+    life: '1902 — 1980',
+    year: '1930',
+    text: `Gle malu voćku poslije kiše:
+Puna je kapi pa ih njiše.
+I bliješti suncem obasjana,
+Čudesna raskoš njenih grana.
+
+Al nek se sunce malko skrije,
+Nestane sve te čarolije.
+Ona je opet kao prvo,
+Obično, jadno, malo drvo.`,
+  },
+  {
+    title: 'Himna slobodi',
+    poet: 'Ivan Gundulić',
+    life: '1589 — 1638',
+    year: '1628',
+    collection: 'Dubravka',
+    text: `O lijepa, o draga, o slatka slobodo,
+dar u kom sva blaga višnji nam bog je dô,
+uzroče istini od naše sve slave,
+uresu jedini od ove Dubrave,
+sva srebra, sva zlata, svi ljudcki životi
+ne mogu bit plata tvôj čistoj ljepoti!`,
+  },
+  {
+    title: 'Dvoje',
+    poet: 'Dobriša Cesarić',
+    life: '1902 — 1980',
+    year: '1930',
+    text: `Ljubeći se od postanja
+Kroz maglu svijeta dvoje bludi,
+Sa čudnom čežnjom, da se nađu
+U metežu stranih ljudi.
+
+Razmišljaju o sebi često
+I prevarit će se kadikad,
+Da su jedno drugo našli,
+A neće se naći nikad.
+
+Pa ipak, on će jednom doć
+U sobu onoga hotela,
+U kom je ona cijelu noć
+Uz uzdisaje mora bdjela.
+
+Pred zoru, kad u krevet legne,
+Na onu misleć koju traži,
+Ni slutit neće, da mu jorgan
+Pokrivaše već njene draži.
+
+I možda će u restoranu
+Iz one čaše on da pije,
+Na kojoj bjehu njena usta
+Nekoliko dana prije.`,
+  },
+  {
+    title: 'Pjesma mrtvog pjesnika',
+    poet: 'Dobriša Cesarić',
+    life: '1902 — 1980',
+    year: '1930',
+    text: `Moj prijatelju, mene više nema,
+Al nisam samo zemlja, samo trava,
+Jer knjiga ta, što držiš je u ruci,
+Samo je dio mene koji spava.
+I ko je čita - u život me budi.
+Probudi me, i bit ću tvoja java.
+
+Ja nemam više proljeća i ljeta,
+Jeseni nemam, niti zima.
+Siroti mrtvac ja sam, koji u se
+Ništa od svijeta ne može da prima.
+I što od svijetlog osta mi života,
+U zagrljaju ostalo je rima.
+
+Pred smrću ja se skrih (koliko mogoh)
+U stihove. U žaru sam ih kovo,
+Al zatvoriš li za njih svoje srce,
+Oni su samo sjen i mrtvo slovo.
+Otvori ga, i ja ću u te prijeći
+Ko bujna rijeka u korito novo.
+
+Još koji časak htio bih da živim
+U grudima ti. Sve svoje ljepote
+Ja ću ti dati. Sve misli, sve snove,
+Sve što mi vrijeme nemilosno ote,
+Sve zanose, sve ljubavi, sve nade,
+Sve uspomene -- o mrtvi živote!
+
+Povrati me u moje stare dane!
+Ja hoću svjetla! Sunca, koje zlati
+Sve čeg se takne. Ja topline hoću
+I obzorja, moj druže nepoznati.
+I zanosa! i zvijezda, kojih nema
+U mojoj noći. Njih mi, dragi, vrati.
+
+Ko oko svjetla leptirice noćne
+Oko života tužaljke mi kruže.
+Pomozi mi da dignem svoje vjeđe,
+Da ruke mi se u čeznuću pruže.
+Ja hoću biti mlad, ja hoću ljubit,
+I biti ljubljen, moj neznani druže!
+
+Sav život moj u tvojoj sad je ruci.
+Probudi me! Proživjet ćemo oba
+Sve moje stihom zadržane sate,
+Sve sačuvane sne iz davnog doba.
+Pred vratima života ja sam prosjak.
+Čuj moje kucanje! Moj glas iz groba!`,
+  },
+  {
+    title: 'Moja preobraženja',
+    poet: 'Antun Branko Šimić',
+    life: '1898 — 1925',
     year: '1920',
-    sourceUrl: 'https://www.poezija.hr/',
-  },
-  {
-    title: 'Kolajna',
-    poet: 'Tin Ujević',
-    life: '1891 — 1955',
-    year: '1926',
-    sourceUrl: 'https://www.poezija.hr/',
-  },
-  {
-    title: 'Moj dom',
-    poet: 'Silvije Strahimir Kranjčević',
-    life: '1865 — 1908',
-    year: '1898',
-    sourceUrl: 'https://www.poezija.hr/moj-dom-silvije-strahimir-kranjcevic/',
-  },
-  {
-    title: 'Gospodskom Kastoru',
-    poet: 'Silvije Strahimir Kranjčević',
-    life: '1865 — 1908',
-    year: '1902',
-    sourceUrl: 'https://www.poezija.hr/gospodskomu-kastoru-silvije-strahimir-kranjcevic/',
-  },
-  {
-    title: 'Rodu o jeziku',
-    poet: 'Petar Preradović',
-    life: '1818 — 1872',
-    year: '1860',
-    sourceUrl: 'https://www.poezija.hr/',
-  },
-  {
-    title: 'Smrt Smail-age Čengića',
-    poet: 'Ivan Mažuranić',
-    life: '1814 — 1890',
-    year: '1846',
-    sourceUrl: 'https://www.poezija.hr/',
+    collection: 'Preobraženja',
+    text: `Ja pjevam sebe kad iz crne bezdane i mučne noći
+iznesem blijedo meko lice u kristalno jutro
+i s pogledima plivam preko polja livada i voda
+
+Ja pjevam sebe koji umrem na dan bezbroj puta
+i bezbroj puta uskrsnem
+
+O Bože daj me umorna od mijena
+preobrazi u tvoju svijetlu nepromjenjivu i vječnu zvijezdu
+što s dalekog će neba noću sjati
+u crne muke noćnih očajnika`,
   },
   {
     title: 'Putnik',
