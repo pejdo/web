@@ -10,11 +10,7 @@ import { sententiae } from '@/data/sententiae';
 >
   <div class="container max-w-3xl mx-auto py-16 px-6">
     <header class="mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Latinski</h1>
-      <p class="text-lg text-muted-foreground">
-        Dvadeset osam latinskih sentencija — kratkih izreka pjesnika, filozofa i pravnika — svaka s
-        prijevodom i izvorom.
-      </p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Latinski</h1>
     </header>
 
     <form
@@ -24,7 +20,6 @@ import { sententiae } from '@/data/sententiae';
       hidden
       aria-label="Pretraživanje sentencija"
     >
-      <label for="sententiae-query" class="sr-only">Pretraži sentencije</label>
       <div class="relative">
         <svg
           class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
@@ -43,6 +38,7 @@ import { sententiae } from '@/data/sententiae';
           id="sententiae-query"
           type="search"
           autocomplete="off"
+          aria-label="Pretraži latinski, prijevod ili izvor"
           placeholder="Pretraži latinski, prijevod ili izvor"
           class="w-full min-h-11 rounded-lg border bg-card pl-11 pr-4 py-2 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-sententiae-input
