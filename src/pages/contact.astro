@@ -16,7 +16,6 @@ import Contact from '@/components/sections/Contact.astro';
  * static assets does not).
  */
 const formEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT;
-const contactEmail = 'nikola@pejdo.com';
 
 /** A mailto: submission cannot report a result, so banners need a real endpoint. */
 const usesEndpoint = Boolean(formEndpoint);
@@ -44,7 +43,7 @@ const banners = [
     key: 'error',
     tone: 'error',
     title: 'Poruka nije poslana.',
-    body: `Došlo je do tehničke pogreške. Pokušajte ponovno ili pišite izravno na ${contactEmail}.`,
+    body: 'Došlo je do tehničke pogreške. Pokušajte ponovno malo kasnije.',
   },
 ] as const;
 ---
@@ -79,8 +78,7 @@ const banners = [
   <Contact
     title="Javite se"
     subtitle="Pitanja, upiti za projekt ili povratne informacije — pošaljite poruku i javit ću se u najkraćem roku."
-    email={contactEmail}
-    formAction={formEndpoint ?? `mailto:${contactEmail}`}
+    formAction={formEndpoint ?? '/api/contact'}
     formSubject="Nova poruka s web stranice"
   />
 </BaseLayout>

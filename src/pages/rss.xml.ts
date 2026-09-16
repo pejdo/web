@@ -16,8 +16,6 @@ export async function GET(context: import('astro').APIContext) {
       author: post.data.author ?? 'Nikola Pejdo',
       link: `/blog/${post.id}/`,
     })),
-    customData: `<language>en-us</language>
-<managingEditor>nikola@pejdo.com (Nikola Pejdo)</managingEditor>
-<webMaster>nikola@pejdo.com (Nikola Pejdo)</webMaster>`,
+    customData: `<language>en-us</language>`,
   });
 }
