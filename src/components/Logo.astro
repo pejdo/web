@@ -2,24 +2,20 @@
 /**
  * Logo Component
  *
- * DCR (Dental Centar Repic) brand logo, taken from the brand manual.
- *
- * Two lockups are available. The compact one (tooth mark set inside the DCR
- * letters) is the default because the tagline in the extended lockup becomes
- * illegible below the manual's 30 mm minimum width, which is roughly what a
- * site header allows. Pass showText to get the extended lockup with the
- * "Dental centar Repic" wordmark, and only use it at size="lg" or larger.
- *
- * Light mode uses the colour variant, dark mode the negative (white) one.
+ * PEJDO.COM brand logo. Uses the horizontal lockup (mark + wordmark) by
+ * default and the standalone mark when showText is false.
+ * Light mode uses the blue variant, dark mode the white variant.
+ * Used consistently across Header, Footer, and Auth layouts.
  *
  * @example
  * ```astro
  * <Logo />
- * <Logo showText size="lg" />
+ * <Logo showText={false} />
+ * <Logo size="lg" />
  * ```
  */
 interface Props {
-  /** Use the extended lockup with the "Dental centar Repic" wordmark */
+  /** Show the wordmark next to the mark */
   showText?: boolean;
   /** Size variant */
   size?: 'sm' | 'md' | 'lg';
@@ -27,31 +23,27 @@ interface Props {
   class?: string;
 }
 
-const { showText = false, size = 'md', class: className = '' } = Astro.props;
+const { showText = true, size = 'md', class: className = '' } = Astro.props;
 
-// The extended lockup is nearly square-ish (1.96:1) next to the compact one
-// (2.43:1), so it needs more height to read at the same optical weight.
-const sizeClasses = showText
-  ? { sm: 'h-10', md: 'h-12', lg: 'h-16' }
-  : { sm: 'h-6', md: 'h-8', lg: 'h-10' };
+const sizeClasses = {
+  sm: 'h-5',
+  md: 'h-6',
+  lg: 'h-8',
+};
 
-const lightSrc = showText ? '/dcr-logo.svg' : '/dcr-lockup.svg';
-const darkSrc = showText ? '/dcr-logo-white.svg' : '/dcr-lockup-white.svg';
+const lightSrc = showText ? '/logo.png' : '/logo-mark.png';
+const darkSrc = showText ? '/logo-white.png' : '/logo-mark-white.png';
 
-// Intrinsic aspect of the exported assets (used to avoid layout shift)
-const intrinsic = showText ? { width: 344, height: 182 } : { width: 250, height: 103 };
+// Intrinsic dimensions of the exported assets (used to avoid layout shift)
+const intrinsic = showText ? { width: 714, height: 160 } : { width: 186, height: 160 };
 ---
 
-<a
-  href="/"
-  class:list={['flex items-center', className]}
-  aria-label="DCR - Dental Centar Repic home"
->
+<a href="/" class:list={['flex items-center', className]} aria-label="PEJDO.COM home">
   <img
     src={lightSrc}
     width={intrinsic.width}
     height={intrinsic.height}
-    alt="DCR - Dental Centar Repic"
+    alt="PEJDO.COM"
     class:list={[sizeClasses[size], 'w-auto dark:hidden']}
     loading="eager"
     decoding="async"
@@ -60,7 +52,7 @@ const intrinsic = showText ? { width: 344, height: 182 } : { width: 250, height:
     src={darkSrc}
     width={intrinsic.width}
     height={intrinsic.height}
-    alt="DCR - Dental Centar Repic"
+    alt="PEJDO.COM"
     class:list={[sizeClasses[size], 'w-auto hidden dark:block']}
     loading="eager"
     decoding="async"
